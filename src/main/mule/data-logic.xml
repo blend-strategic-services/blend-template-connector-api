@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd">
+	<sub-flow name="dataExport" doc:id="4e7aac9f-5781-44b9-9ff1-b684caabab27" >
+		<json-logger:logger doc:name="Before" doc:id="a28772dd-356b-49c6-ba07-3769261b968f" config-ref="json_logger_config" tracePoint="BEFORE_TRANSFORM" message="Transform">
+			<json-logger:content ><![CDATA[#[output application/json ---
+{
+
+}]]]></json-logger:content>
+		</json-logger:logger>
+		<ee:transform doc:name="Transform" doc:id="edf3dc8d-859a-4f14-be0b-8bf2a11de51b" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  blendLoanId: "5f36df1a-44c6-4144-9ac9-d9600d460803",
+  externalLoanId: "15600001"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<set-variable value="#[201]" doc:name="httpStatus" doc:id="a661a99f-2a8d-4b9a-a155-23ed456ad6d4" variableName="httpStatus"/>
+		<json-logger:logger doc:name="After" doc:id="dfd8b019-2655-4734-bd37-a09e7e6dff7a" config-ref="json_logger_config" tracePoint="AFTER_TRANSFORM" message="Transform -- &gt; post">
+			<json-logger:content ><![CDATA[#[output application/json ---
+{
+	tenant : "tenant variable",
+	blendLoanId : "blendLoanId",
+	externalLoanId : "externalLoanId"
+}]]]></json-logger:content>
+		</json-logger:logger>
+	</sub-flow>
+</mule>

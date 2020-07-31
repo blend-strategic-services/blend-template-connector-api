@@ -151,17 +151,7 @@ output application/json
 {
 }]]]></json-logger:content>
 		</json-logger:logger>
-		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="60751918-6182-4c1c-bec6-08b917782620" doc:name="Replace it with flowVar reference or VM to point to implementation logic">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  blendLoanId: "5f36df1a-44c6-4144-9ac9-d9600d460803",
-  externalLoanId: "15600001"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="Flow Reference" doc:id="3203e5d1-3184-49ab-9a4b-f6392c43838f" name="dataExport"/>
 		<json-logger:logger doc:name="End" doc:id="e3ab4a32-1f5d-4a48-b4ca-90f01055bc97" config-ref="json_logger_config" message="event processed" tracePoint="END">
 			<json-logger:content ><![CDATA[#[output application/json ---
 {

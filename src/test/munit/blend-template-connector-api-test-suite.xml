@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="blend-template-connector-api-test-suite.xml" />
+	<munit:test name="blend-template-connector-api-test-suite-post:\ext\v1\resourcename:application\json:blend-template-connector-api-configTest" doc:id="c167618d-29e4-4eb3-871b-ab4d96bca88b" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to post:\ext\v1\resourcename:application\json:blend-template-connector-api-config" doc:id="1581a820-1c47-47ed-b87e-be168b3a37be" name="post:\ext\v1\resourcename:application\json:blend-template-connector-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="684a8c1f-ffc7-4a33-87c7-6cf6ebf867ee" expression="#[vars.httpStaus == 201]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+
+</mule>
