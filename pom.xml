@@ -6,7 +6,7 @@
     <artifactId>blend-template-connector-api</artifactId>    <!-- Change to API name i.e. myapi-system-api -->
     <version>1.0.0</version>    <!-- Change to API version: 1.0.0-->
     <packaging>mule-application</packaging>
-    <name>blend-template-connector-api-backup2</name>    <!-- Change to API Name i.e. myapi system API-->
+    <name>blend-template-connector-api</name>    <!-- Change to API Name i.e. myapi system API-->
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
