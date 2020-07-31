@@ -1,0 +1,40 @@
+api:
+  id: "tbd"
+
+keystore:
+  password: "![rCOBzPxBFfrjDn9jgnp1zo0EczQIWpCZgCoEQZRA4Y4eGxwWaPThzkJqYuPKZhJR]"
+
+cloudhubConnection:
+  username: "no-reply-integrations"
+  password: "![XINOsf0Tso6BR1Hujmu9bZfkHO5l3zGh]"
+  domain: "blend-template-connector-api-dev"
+  envId: "d2ab3fb4-221a-4a1a-9941-6a1011040bf6"
+
+listener:
+  https:
+    port: "8082"
+
+blend:
+  host: "mule-worker-blend-sys-api-dev.us-e1.cloudhub.io"
+  port: "8082"
+  apiVersionHeader: "3.1.0"
+  username: "![VW9ta0kNHfSzMG7OhLPKzzlO2LakJANTiUfeYyfs1qn48SQ2n8yBRQ==]"
+  password: "![nxtLAEqVyyYcnuJRC7qaNgAvw7+WTxzXPFivs3xDWolUJ5MBhSAHWg==]"
+
+msutil:
+  host: "mule-worker-blend-msutil-api-dev.us-e1.cloudhub.io"
+  port: "8082"
+  username: "![VW9ta0kNHfSzMG7OhLPKzzlO2LakJANTiUfeYyfs1qn48SQ2n8yBRQ==]"
+  password: "![nxtLAEqVyyYcnuJRC7qaNgAvw7+WTxzXPFivs3xDWolUJ5MBhSAHWg==]"
+
+externalProxy:
+  host: "mule-worker-blend-external-proxy-api-dev.us-e1.cloudhub.io"
+  port: "8082"
+  username: "![VW9ta0kNHfSzMG7OhLPKzzlO2LakJANTiUfeYyfs1qn48SQ2n8yBRQ==]"
+  password: "![nxtLAEqVyyYcnuJRC7qaNgAvw7+WTxzXPFivs3xDWolUJ5MBhSAHWg==]" 
+
+psqlDb:
+  host: "localhost"
+  port: "5432"
+  username: "postgres"
+  password: "postgres"

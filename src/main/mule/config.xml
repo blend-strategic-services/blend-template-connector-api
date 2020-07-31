@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+	xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<http:listener-config name="main_listener" doc:name="HTTP Listener config" doc:id="dcb708a3-87db-4f0c-a266-cf608e1aceea" >
+		<http:listener-connection host="0.0.0.0" port="${secure::listener.https.port}" protocol="HTTPS">
+			<tls:context >
+				<tls:key-store type="pkcs12" path="keystore-blend-template-connector-api.p12" keyPassword="${secure::keystore.password}" password="${secure::keystore.password}" />
+			</tls:context>
+		</http:listener-connection>
+	</http:listener-config>
+	<json-logger:config name="json_logger_config" doc:name="JSON Logger Config" doc:id="2a2370a7-774f-47cb-906f-366ca64df05b" environment="${env}"/>
+	<configuration-properties doc:name="configuration_properties" doc:id="b1b6b65c-20ab-48d6-b374-0d1160fe846d" file="blend-template-connector-api-global.yaml" />
+	<global-property doc:name="Global Property" doc:id="d9ba1573-7be0-4cb5-a270-047b742a0b2d" name="env" value="local" />
+
+	<http:request-config name="msutil_config" doc:name="HTTP Request configuration" doc:id="e9e6c645-88a2-450f-869c-215f9043e24d">
+		<http:request-connection protocol="HTTPS" host="${secure::msutil.host}" port="${secure::msutil.port}">
+			<tls:context >
+				<tls:trust-store path="truststore-blend-msutil-api.p12" password="${secure::keystore.password}" type="pkcs12" />
+			</tls:context>
+			<http:authentication >
+				<http:basic-authentication username="${secure::msutil.username}" password="${secure::msutil.password}" />
+			</http:authentication>
+		</http:request-connection>
+	</http:request-config>
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="72499f6e-d92f-4cbe-9b9b-d1470c0e2680" file="blend-template-connector-api-${env}.yaml" key="${masterKey}" >
+		<secure-properties:encrypt algorithm="Blowfish" />
+	</secure-properties:config>
+	<global-property doc:name="Global Property" doc:id="109d5415-f22a-473f-bb4c-d38da283da5b" name="masterKey" value="placeholder" />
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="b30f4d82-bcf6-4f69-8d16-48fccd3f07dd" >
+		<db:generic-connection url="jdbc:postgresql://${secure::psqlDb.host}:${secure::psqlDb.port}/postgres" driverClassName="org.postgresql.Driver" user="${secure::psqlDb.username}" password="${secure::psqlDb.password}" />
+	</db:config>
+</mule>

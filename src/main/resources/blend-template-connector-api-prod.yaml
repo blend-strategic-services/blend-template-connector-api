@@ -1,0 +1,40 @@
+api:
+  id: "tbd"
+
+keystore:
+  password: "![gY/m1n/7Akdlt30dOIwf2LovR9q7qa0Vmnh4amodRz+3pTxWuu6tmnyo8IJ4RJN9]"
+
+cloudhubConnection:
+  username: "no-reply-integrations"
+  password: "![WISSqjTOS0iI3S43MLlxoGcShHk9TryF]"
+  domain: "blend-template-connector-api-prod"
+  envId: "ecf5464e-6a54-43db-8933-64467ed64a6e"
+
+listener:
+  https:
+    port: "8092"
+
+blend:
+  host: "mule-worker-internal-blend-sys-api-prod.us-e1.cloudhub.io"
+  port: "8092"
+  apiVersionHeader: "3.1.0"
+  username: "![O8PzdTq9It6j0fcd9Zsrere7TBvYLSngK80hQ6pSBqsKc0zdnchLuQ==]"
+  password: "![W6ms2A9ohRWqoxBesvgVCrTesuFGTkBMTmKp5y869NNV2ROuESxmng==]"
+
+msutil:
+  host: "mule-worker-internal-blend-msutil-api-prod.us-e1.cloudhub.io"
+  port: "8092"
+  username: "![O8PzdTq9It6j0fcd9Zsrere7TBvYLSngK80hQ6pSBqsKc0zdnchLuQ==]"
+  password: "![W6ms2A9ohRWqoxBesvgVCrTesuFGTkBMTmKp5y869NNV2ROuESxmng==]"
+
+externalProxyAPI:
+  host: "mule-worker-internal-blend-external-proxy-api-prod.us-e1.cloudhub.io"
+  port: "8092"
+  username: "![O8PzdTq9It6j0fcd9Zsrere7TBvYLSngK80hQ6pSBqsKc0zdnchLuQ==]"
+  password: "![W6ms2A9ohRWqoxBesvgVCrTesuFGTkBMTmKp5y869NNV2ROuESxmng==]"
+
+db:
+  host: "mulesoft-prod.cukqgxfgcjxg.us-east-1.rds.amazonaws.com"
+  port: "5432"
+  username: "Contact IE for username"
+  password: "Contact IE for password"

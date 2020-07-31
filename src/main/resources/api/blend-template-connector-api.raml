@@ -1,0 +1,38 @@
+#%RAML 1.0
+baseUri: https://anypoint.mulesoft.com/mocking/api/v1/links/6e96f77c-0bd5-4218-9721-088e4a430dd5/ # 
+title: blend-docutech-connector-api 
+version: v1
+description: API used for docutech connector
+
+securitySchemes:
+ basic: !include  exchange_modules/dae0cf96-56ae-4531-8ac8-994a57b3a880/security/1.0.5/basic-auth-security-scheme.raml
+
+/ext/{version}/resourcename:
+  post:
+    securedBy: [basic]
+    description: api healthcheck - external resource. Use the resource name signature to design external api accessiale via dlb.
+    body:
+      application/json:
+        example: !include examples/data_post.raml
+    responses:
+      200:
+        body:
+          application/json:
+            description: return jwt token
+            example: !include examples/success.raml
+        
+      401:
+        body:
+          application/json:
+            description: Unauthorized
+            example: !include examples/error.raml
+              
+/ping:
+  get:
+    securedBy: [basic]
+    description: api health check - internal endpoint
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include exchange_modules/dae0cf96-56ae-4531-8ac8-994a57b3a880/ping-resource/1.0.0/examples/ping-response-example.json

@@ -1,0 +1,16 @@
+json:
+  logger:
+    application:
+      name: ${project.artifactId}
+      version: ${project.version}
+      disabledFields: ""
+
+api:
+  base: "api"
+  
+externalRequest:
+  maxRetries: "2"
+  retryInterval: "2000"
+
+queue:
+  redeliveryCount: "5"

@@ -1,0 +1,9 @@
+{
+	"minMuleVersion": "4.2.2",
+	"secureProperties": [
+		"anypoint.platform.client_secret",
+		"secret.key",
+		"masterKey",
+		"loggerToken"
+	]
+}
