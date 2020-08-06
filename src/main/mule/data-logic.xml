@@ -6,12 +6,18 @@
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd">
 	<sub-flow name="dataExport" doc:id="4e7aac9f-5781-44b9-9ff1-b684caabab27" >
-		<json-logger:logger doc:name="Before" doc:id="a28772dd-356b-49c6-ba07-3769261b968f" config-ref="json_logger_config" tracePoint="BEFORE_TRANSFORM" message="Transform">
-			<json-logger:content ><![CDATA[#[output application/json ---
+		<logger level="INFO" doc:name="Start" doc:id="c2569863-43e6-4f1a-b21c-175ff79a4baa" message='#[output application/json
+---
 {
-
-}]]]></json-logger:content>
-		</json-logger:logger>
+   trackingId: correlationId,
+   message: "Event received",
+   service: "blend-template-connector-api",
+   time: now(),
+   tenantName : vars.tenant default "",
+   blendLoanId : vars.blendLoanId default "",
+   externalLoanId : vars.externalLoanId default "",
+   environment: "test"
+}]'/>
 		<ee:transform doc:name="Transform" doc:id="edf3dc8d-859a-4f14-be0b-8bf2a11de51b" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
@@ -24,13 +30,17 @@ output application/json
 			</ee:message>
 		</ee:transform>
 		<set-variable value="#[201]" doc:name="httpStatus" doc:id="a661a99f-2a8d-4b9a-a155-23ed456ad6d4" variableName="httpStatus"/>
-		<json-logger:logger doc:name="After" doc:id="dfd8b019-2655-4734-bd37-a09e7e6dff7a" config-ref="json_logger_config" tracePoint="AFTER_TRANSFORM" message="Transform -- &gt; post">
-			<json-logger:content ><![CDATA[#[output application/json ---
+		<logger level="INFO" doc:name="End" doc:id="a9a45f17-43d5-40b2-9222-32d81a806074" message='#[output application/json
+---
 {
-	tenant : "tenant variable",
-	blendLoanId : "blendLoanId",
-	externalLoanId : "externalLoanId"
-}]]]></json-logger:content>
-		</json-logger:logger>
+   trackingId: correlationId,
+   message: "Loan exported",
+   service: "blend-template-connector-api",
+   time: now(),
+   tenantName : vars.tenant default "",
+   blendLoanId : vars.blendLoanId default "",
+   externalLoanId : vars.externalLoanId default "",
+   environment: "test"
+}]'/>
 	</sub-flow>
 </mule>
