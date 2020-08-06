@@ -16,7 +16,6 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 			</tls:context>
 		</http:listener-connection>
 	</http:listener-config>
-	<json-logger:config name="json_logger_config" doc:name="JSON Logger Config" doc:id="2a2370a7-774f-47cb-906f-366ca64df05b" environment="${env}"/>
 	<configuration-properties doc:name="configuration_properties" doc:id="b1b6b65c-20ab-48d6-b374-0d1160fe846d" file="blend-template-connector-api-global.yaml" />
 	<global-property doc:name="Global Property" doc:id="d9ba1573-7be0-4cb5-a270-047b742a0b2d" name="env" value="dev" />
 

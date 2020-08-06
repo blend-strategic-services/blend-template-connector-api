@@ -6,18 +6,7 @@
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd">
 	<sub-flow name="dataExport" doc:id="4e7aac9f-5781-44b9-9ff1-b684caabab27" >
-		<logger level="INFO" doc:name="Start" doc:id="c2569863-43e6-4f1a-b21c-175ff79a4baa" message='#[output application/json
----
-{
-   trackingId: correlationId,
-   message: "Event received",
-   service: "blend-template-connector-api",
-   time: now(),
-   tenantName : vars.tenant default "",
-   blendLoanId : vars.blendLoanId default "",
-   externalLoanId : vars.externalLoanId default "",
-   environment: "test"
-}]'/>
+		<logger level="DEBUG" doc:name="Payload for debug only" doc:id="c2569863-43e6-4f1a-b21c-175ff79a4baa" message="#[payload]" category="com.blend"/>
 		<ee:transform doc:name="Transform" doc:id="edf3dc8d-859a-4f14-be0b-8bf2a11de51b" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
@@ -30,17 +19,5 @@ output application/json
 			</ee:message>
 		</ee:transform>
 		<set-variable value="#[201]" doc:name="httpStatus" doc:id="a661a99f-2a8d-4b9a-a155-23ed456ad6d4" variableName="httpStatus"/>
-		<logger level="INFO" doc:name="End" doc:id="a9a45f17-43d5-40b2-9222-32d81a806074" message='#[output application/json
----
-{
-   trackingId: correlationId,
-   message: "Loan exported",
-   service: "blend-template-connector-api",
-   time: now(),
-   tenantName : vars.tenant default "",
-   blendLoanId : vars.blendLoanId default "",
-   externalLoanId : vars.externalLoanId default "",
-   environment: "test"
-}]'/>
 	</sub-flow>
 </mule>

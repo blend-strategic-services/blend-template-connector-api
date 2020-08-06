@@ -122,11 +122,18 @@ output application/json
         </error-handler>
     </flow>
     <flow name="get:\ping:blend-template-connector-api-config">
-        <json-logger:logger doc:name="Start" doc:id="1fab7a16-0078-46f2-b7dd-7657e0368742" config-ref="json_logger_config" message="event received">
-			<json-logger:content><![CDATA[#[output application/json ---
+		<logger level="INFO" doc:name="Start" doc:id="94e02029-88e9-45a7-af87-d5c204bf1432" message="#[output application/json
+---
 {
-}]]]></json-logger:content>
-		</json-logger:logger>
+   trackingId: correlationId,
+   message: &quot;Start ping&quot;,
+   service: &quot;blend-template-connector-api&quot;,
+   time: now(),
+   tenantName : vars.tenant default &quot;&quot;,
+   blendLoanId : vars.blendLoanId default &quot;&quot;,
+   externalLoanId : vars.externalLoanId default &quot;&quot;,
+   environment: p('env')
+}]" />
 		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="ca187e45-db42-42cd-acdb-1a742d18b985">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
@@ -138,24 +145,44 @@ output application/json
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
-		<json-logger:logger doc:name="End" doc:id="55f8e5cf-fa7e-430a-ada0-f3bf3b64af07" config-ref="json_logger_config" tracePoint="END" message="event processed" >
-			<json-logger:content ><![CDATA[#[output application/json ---
+		<logger level="INFO" doc:name="End" doc:id="9dc1ab2d-1b47-4efd-b30e-fa1c465a4f53" message="#[output application/json
+---
 {
-	payload : payload
-}]]]></json-logger:content>
-		</json-logger:logger>
+   trackingId: correlationId,
+   message: &quot;End ping&quot;,
+   service: &quot;blend-template-connector-api&quot;,
+   time: now(),
+   tenantName : vars.tenant default &quot;&quot;,
+   blendLoanId : vars.blendLoanId default &quot;&quot;,
+   externalLoanId : vars.externalLoanId default &quot;&quot;,
+   environment: p('env')
+}]" />
     </flow>
     <flow name="post:\ext\v1\resourcename:application\json:blend-template-connector-api-config">
-        <json-logger:logger doc:name="Start" doc:id="142b2343-8bde-4a68-a108-b3c9d701adcc" config-ref="json_logger_config" message="event received">
-			<json-logger:content ><![CDATA[#[output application/json ---
+		<logger level="INFO" doc:name="Start" doc:id="26eaee8f-d9e4-4cd7-b34a-6f56c4a07ff1" message="#[output application/json
+---
 {
-}]]]></json-logger:content>
-		</json-logger:logger>
+   trackingId: correlationId,
+   message: &quot;Event received&quot;,
+   service: &quot;blend-template-connector-api&quot;,
+   time: now(),
+   tenantName : vars.tenant default &quot;&quot;,
+   blendLoanId : vars.blendLoanId default &quot;&quot;,
+   externalLoanId : vars.externalLoanId default &quot;&quot;,
+   environment: p('env')
+}]" />
 		<flow-ref doc:name="Flow Reference" doc:id="3203e5d1-3184-49ab-9a4b-f6392c43838f" name="dataExport"/>
-		<json-logger:logger doc:name="End" doc:id="e3ab4a32-1f5d-4a48-b4ca-90f01055bc97" config-ref="json_logger_config" message="event processed" tracePoint="END">
-			<json-logger:content ><![CDATA[#[output application/json ---
+		<logger level="INFO" doc:name="End" doc:id="305a4ed6-aff3-443d-b69e-8e60c4366bcf" message="#[output application/json
+---
 {
-}]]]></json-logger:content>
-		</json-logger:logger>
+   trackingId: correlationId,
+   message: &quot;Loan exported&quot;,
+   service: &quot;blend-template-connector-api&quot;,
+   time: now(),
+   tenantName : vars.tenant default &quot;&quot;,
+   blendLoanId : vars.blendLoanId default &quot;&quot;,
+   externalLoanId : vars.externalLoanId default &quot;&quot;,
+   environment: p('env')
+}]" />
     </flow>
 </mule>
