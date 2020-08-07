@@ -71,6 +71,7 @@ output application/java
 404]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
+			<logger level="INFO" doc:name="Logger" doc:id="2a2fabd3-fa35-4414-8533-7976688673a1" message="#[payload]"/>
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="c4f6806e-4ed9-41f3-8107-6a1f6433b138" type="APIKIT:BAD_REQUEST, HTTP:BAD_REQUEST">
 			<ee:transform doc:name="Transform Message" doc:id="e48ebf98-80a8-4827-b000-6e9b09e840cc" >
@@ -93,6 +94,7 @@ output application/java
 400]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
+			<logger level="INFO" doc:name="Logger" doc:id="3f6d9303-01cb-4f90-8696-4cac725c615d" message="#[payload]" />
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="69a84a47-c3be-4fd3-a6f7-4746efe4ce4e" type="APIKIT:METHOD_NOT_ALLOWED, HTTP:METHOD_NOT_ALLOWED">
 			<ee:transform doc:name="Transform Message" doc:id="f194c66e-79b5-49ae-a682-8fd761fafcaa" >
@@ -115,6 +117,7 @@ output application/java
 405]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
+			<logger level="INFO" doc:name="Logger" doc:id="b19468c5-fd81-427c-87cb-349dc0c1accf" message="#[payload]" />
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="55c77cc1-f7ca-4d72-908a-407cebb09929" type="APIKIT:NOT_ACCEPTABLE, HTTP:NOT_ACCEPTABLE">
 			<ee:transform doc:name="Transform Message" doc:id="51c4cd4b-abfd-435a-86dd-608a58da4d0a" >
@@ -137,6 +140,7 @@ output application/java
 406]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
+			<logger level="INFO" doc:name="Logger" doc:id="0c3c0f22-8b36-4b04-83ef-6a324f2e75e0" message="#[payload]" />
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="b41585e9-e581-4c35-9647-288a89b4283b" type="APIKIT:UNSUPPORTED_MEDIA_TYPE, HTTP:UNSUPPORTED_MEDIA_TYPE">
 			<ee:transform doc:name="Transform Message" doc:id="cbd32e7a-58e3-4a89-9821-39d7b0c27a48" >
@@ -159,6 +163,7 @@ output application/java
 415]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
+			<logger level="INFO" doc:name="Logger" doc:id="d8ffed5b-1676-42da-bb4a-db95bc68831a" message="#[payload]" />
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="b1d3aa29-6c20-4061-ac03-52f16d2e7780" type="HTTP:TOO_MANY_REQUESTS">
 			<ee:transform doc:name="Transform Message" doc:id="66a94405-029c-48c0-811b-d557386e73a6" >
@@ -181,6 +186,7 @@ output application/java
 429]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
+			<logger level="INFO" doc:name="Logger" doc:id="777f8560-6979-4682-a687-6543ec30ede3" message="#[payload]" />
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="9f92b8ec-62fd-4b2c-b656-fbf567c81543" type="APIKIT:NOT_IMPLEMENTED">
 			<ee:transform doc:name="Transform Message" doc:id="5f508459-2f57-4fc6-a912-3ebe5373ed6d" >
@@ -203,6 +209,7 @@ output application/java
 501]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
+			<logger level="INFO" doc:name="Logger" doc:id="84089d2d-02f8-41ef-aea6-e79dfdd136d9" message="#[payload]" />
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="fde89aad-0a19-4392-8a04-64845f185d29" type="HTTP:CONNECTIVITY, HTTP:RETRY_EXHAUSTED, HTTP:SERVICE_UNAVAILABLE">
 			<ee:transform doc:name="Transform Message" doc:id="8925b35e-2345-4ee6-90bf-7eca67c4f776" >
@@ -240,6 +247,7 @@ output application/json
 				</ee:variables>
 			</ee:transform>
 			<flow-ref doc:name="send-email-alert" doc:id="8e63c920-2406-4e5c-8948-919ef2ae5d2e" name="send-email-alert"/>
+			<logger level="INFO" doc:name="Logger" doc:id="8a3fb6ee-2efe-4080-9025-0e2bfb4e1ceb" message="#[payload]" />
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="adf0d084-a637-4f9b-9c47-2e2bfe7724fb" type="HTTP:TIMEOUT">
 			<ee:transform doc:name="Transform Message" doc:id="ab352ae0-6f00-46e3-9964-241ecb1e5b37" >
@@ -277,11 +285,12 @@ output application/json
 				</ee:variables>
 			</ee:transform>
 			<flow-ref doc:name="send-email-alert" doc:id="94425435-2a70-4b4c-a5ab-0368257dd243" name="send-email-alert"/>
+			<logger level="INFO" doc:name="Logger" doc:id="2ba8ff55-3ccc-4fb6-b7b2-7efdeb62f2f4" message="#[payload]" />
 		</on-error-propagate>
-<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="ecbe6abe-9c81-4bef-b8cf-64133d6ea4a1" type="EXPRESSION" when='error.description contains "MISMO Error"'>
-			<ee:transform doc:name="Transform Message" doc:id="de1c4816-dc3b-4c88-a8d5-2d6e34ffdbfd" >
-				<ee:message >
-					<ee:set-payload ><![CDATA[%dw 2.0
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="ecbe6abe-9c81-4bef-b8cf-64133d6ea4a1" type="EXPRESSION" when='error.description contains "MISMO Error"'>
+			<ee:transform doc:name="Transform Message" doc:id="de1c4816-dc3b-4c88-a8d5-2d6e34ffdbfd">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
 output application/xml
 var errorMessage = if (error.description contains("Something")) "Something cannot be empty" 
 else if (error.description contains("Otherthing")) "Otherthing cannot be empty"
@@ -295,8 +304,8 @@ else "Missing Data"
   "transactionId" : correlationId
 }]]></ee:set-payload>
 				</ee:message>
-				<ee:variables >
-					<ee:set-variable variableName="emailPayload" ><![CDATA[%dw 2.0
+				<ee:variables>
+					<ee:set-variable variableName="emailPayload"><![CDATA[%dw 2.0
 output application/json
 var errorMessage = if (error.description contains("DOCUMENT_SETS")) "DOCUMENT_SETS cannot be empty" 
 else if (error.description contains("TWPostingType")) "TWPostingType cannot be empty"
@@ -312,15 +321,11 @@ else "Missing Data"
 	"eventType": vars.eventType,
 	"Blend Instance" : p('secure::blend.tenant')
 }]]></ee:set-variable>
-					<ee:set-variable variableName="httpStatus" ><![CDATA[400]]></ee:set-variable>
+					<ee:set-variable variableName="httpStatus"><![CDATA[400]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
-			<json-logger:logger doc:name="errorResponse" doc:id="549aede2-4135-4028-af3d-3aeeec11055b" config-ref="json_logger_config" message="#[error.description]" tracePoint="EXCEPTION" priority="ERROR">
-				<json-logger:content ><![CDATA[#[output application/json ---
-{
-}]]]></json-logger:content>
-			</json-logger:logger>
-			<flow-ref doc:name="send-email-alert" doc:id="9dbc1249-ead4-48ea-b739-29cefcc93eb4" name="send-email-alert"/>
+			<logger level="INFO" doc:name="Logger" doc:id="722834a5-d1ac-482a-928d-1c061b65c30f" message="#[payload]" />
+			<flow-ref doc:name="send-email-alert" doc:id="9dbc1249-ead4-48ea-b739-29cefcc93eb4" name="send-email-alert" />
 		
 </on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="7d144948-8ec2-427b-838f-3b09c26a47c4" type="HTTP:FORBIDDEN, HTTP:NOT_ACCEPTABLE, HTTP:PARSING, HTTP:SECURITY, HTTP:UNAUTHORIZED">
@@ -344,6 +349,7 @@ output application/java
 403]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
+			<logger level="INFO" doc:name="Logger" doc:id="b8a8c349-fbcf-4376-b3d8-977a1827cf35" message="#[payload]" />
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="d493a574-367a-4911-9cf3-54182a539d53" type="ANY">
 			<ee:transform doc:name="Transform Message" doc:id="8ecb6a8e-829c-4d64-a1e7-1bc74e20f816">
@@ -380,7 +386,7 @@ output application/json
 }]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
-			<json-logger:logger doc:name="errorResponse" doc:id="3aef39b1-083d-46b4-8a53-1acd3fd0b1c4" config-ref="json_logger_config" message="#[error.description]" tracePoint="EXCEPTION" />
+			<logger level="INFO" doc:name="Logger" doc:id="eb17046c-b189-44dd-9944-59d79aa5c331" message="#[payload]" />
 			<flow-ref doc:name="send-email-alert" doc:id="9d5a919d-590c-4c86-a75f-753c23dd26d6" name="send-email-alert" />
 		
 </on-error-propagate>
