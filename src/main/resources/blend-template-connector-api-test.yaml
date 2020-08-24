@@ -1,18 +1,18 @@
 api:
-  id: "16287545"
+  id: ""
 
 keystore:
   password: "![rCOBzPxBFfrjDn9jgnp1zo0EczQIWpCZgCoEQZRA4Y4eGxwWaPThzkJqYuPKZhJR]"
 
 cloudhubConnection:
-  username: "no-reply-integrations"
-  password: "![XINOsf0Tso6BR1Hujmu9bZfkHO5l3zGh]"
-  domain: "blend-template-connector-api-dev"
-  envId: "d2ab3fb4-221a-4a1a-9941-6a1011040bf6"
+  username: ""
+  password: ""
+  domain: ""
+  envId: ""
 
 listener:
   https:
-    port: ""
+    port: "8082"
 
 blend:
   host: ""
