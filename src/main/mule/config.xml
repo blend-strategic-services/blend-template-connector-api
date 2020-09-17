@@ -38,6 +38,6 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 	<db:config name="Database_Config" doc:name="Database Config" doc:id="b30f4d82-bcf6-4f69-8d16-48fccd3f07dd" >
 		<db:generic-connection url="jdbc:postgresql://${secure::psqlDb.host}:${secure::psqlDb.port}/postgres" driverClassName="org.postgresql.Driver" user="${secure::psqlDb.username}" password="${secure::psqlDb.password}" />
 	</db:config>
-	<datadog-logger:config name="DataDog_Connector_Config" doc:name="DataDog Connector Config" doc:id="fba8072f-c7a9-4fa1-ab35-20ffcfb7b366" host="${secure::dd.host}" applicationKey="${secure::dd.applicationKey}" apiKey="${secure::dd.apiKey}" />
+	<datadog-logger:config name="DataDog_Connector_Config" doc:name="DataDog Connector Config" doc:id="fba8072f-c7a9-4fa1-ab35-20ffcfb7b366" host="${secure::dataDog.host}" applicationKey="${secure::dataDog.applicationKey}" apiKey="${secure::dataDog.apiKey}" />
 
 </mule>
