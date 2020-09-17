@@ -28,3 +28,20 @@
 			<Property name="Service" value="blend-template-connector-api" />
 		</Http>
 	</Appenders>
+
+	<Loggers>
+		<!-- Http Logger shows wire traffic on DEBUG. -->
+		<!--AsyncLogger name="org.mule.service.http.impl.service.HttpMessageLogger" level="DEBUG" / -->
+		<AsyncLogger name="org.mule.service.http" level="WARN" />
+		<AsyncLogger name="org.mule.extension.http" level="WARN" />
+
+		<!-- Mule classes -->
+		<AsyncLogger name="org.mule" level="INFO" />
+		<AsyncLogger name="com.mulesoft" level="INFO" />
+
+		<AsyncRoot level="INFO">
+ 		  <AppenderRef ref="CLOUDHUB" />
+		  <AppenderRef ref="BLENDLOGS" />
+		</AsyncRoot>
+	</Loggers>
+</Configuration>
