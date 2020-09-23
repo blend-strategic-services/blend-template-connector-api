@@ -2,7 +2,7 @@ api:
   id: ""
 
 keystore:
-  password: "![rCOBzPxBFfrjDn9jgnp1zo0EczQIWpCZgCoEQZRA4Y4eGxwWaPThzkJqYuPKZhJR]"
+  password: ""
 
 cloudhubConnection:
   username: ""
@@ -32,6 +32,12 @@ externalProxy:
   port: ""
   username: ""
   password: "" 
+
+
+dataDog:
+  host: ""
+  apiKey: ""
+  applicationKey: ""
 
 psqlDb:
   host: ""
