@@ -34,12 +34,7 @@ pipeline {
             }
         }
     }
-    post {
-        failure {
-        }
-        success {
-        }
-    }
+
 }
 
 void setEnvironmentVars(String envParam) {
