@@ -4,15 +4,6 @@ pipeline {
         maven 'maven-3.6.3'
     }
     stages {
-        stage('Unit Test') {
-            steps {
-                script {
-                    setEnvironmentVars(params.environment)
-                }
-                echo 'Running tests...'
-                sh 'mvn clean test'
-            }
-        }
         stage('Deploy to Binary Repo') {
             when {
                 anyOf {
