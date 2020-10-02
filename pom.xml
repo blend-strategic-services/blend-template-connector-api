@@ -79,7 +79,7 @@
                         </properties>
                         <region>us-east-1</region>
                         <workerType>Micro</workerType>
-                        <workers>1</workers>
+                        <workers>2</workers>
                     </cloudHubDeployment>
                 <sharedLibraries>
                         <sharedLibrary>
