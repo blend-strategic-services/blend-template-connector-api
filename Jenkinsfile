@@ -21,7 +21,7 @@ pipeline {
             }
             steps {
                 sh 'echo $PATH'
-                sh 'mvn deploy -DskipTests -DmuleDeploy -Dmule.version=4.2.2 -Danypoint.username=${ANYPOINT_CREDENTIALS_USR} -Danypoint.password=${ANYPOINT_CREDENTIALS_PSW} -e'
+                sh 'mvn deploy -Pdev -DskipTests -DmuleDeploy -Dmule.version=4.2.2 -Danypoint.username=${ANYPOINT_CREDENTIALS_USR} -Danypoint.password=${ANYPOINT_CREDENTIALS_PSW} -e'
             }
         }
     }
