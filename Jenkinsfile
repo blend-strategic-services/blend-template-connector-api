@@ -34,7 +34,7 @@ pipeline {
             steps {
                 sh 'echo $PATH'
                 slackSend (color: '#FFFF00', message: "${env.ENV} > Deploying to Cloudhub: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (<${env.BUILD_URL}|Open>)")
-                sh 'mvn deploy -DskipTests -DmuleDeploy -Dmule.version=4.2.2 -Danypoint.username=${ANYPOINT_CREDENTIALS_USR} -Danypoint.password=${ANYPOINT_CREDENTIALS_PSW} -e'
+                sh 'mvn deploy -DskipTests -DmuleDeploy -Dmule.version=' + "${env.VERSION}" + ' -Danypoint.username=${ANYPOINT_CREDENTIALS_USR} -Danypoint.password=${ANYPOINT_CREDENTIALS_PSW} -e'
             }
         }
     }
@@ -56,14 +56,18 @@ void setEnvironmentVars(String envParam) {
 
         if (env.CLOUDHUB_ENVIRONMENT == "Development") {
             env.ENV = "dev"
+            env.VERSION = "4.3.0"            
         } else if (env.CLOUDHUB_ENVIRONMENT == "Beta") {
             env.ENV = "beta"
+            env.VERSION = "4.3.0"            
         } else if (env.CLOUDHUB_ENVIRONMENT == "Production") {
             env.ENV = "prod"
+        env.VERSION = "4.2.2"            
         }
     } else {
         env.CLOUDHUB_ENVIRONMENT = "Development"
         env.ENV = "dev"
+        env.VERSION = "4.3.0"        
     }
 
     withCredentials([usernamePassword(credentialsId: 'anypoint.client.' + env.ENV, passwordVariable: 'ANYPOINT_CLIENT_SECRET', usernameVariable: 'ANYPOINT_CLIENT_ID')]) {
@@ -78,6 +82,11 @@ void setEnvironmentVars(String envParam) {
 
     withCredentials([string(credentialsId: 'masterKey.' + env.ENV, variable: 'MASTER_KEY')]) {
         env.MASTER_KEY = "$MASTER_KEY"
+    }
+
+    withCredentials([usernamePassword(credentialsId: 'cloudhub.notification', passwordVariable: 'CLOUDHUB_NOTIFICATION_PASSWORD', usernameVariable: 'CLOUDHUB_NOTIFICATION_USERNAME')]) {
+        env.CLOUDHUB_NOTIFICATION_USERNAME = "$CLOUDHUB_NOTIFICATION_USERNAME"
+        env.CLOUDHUB_NOTIFICATION_PASSWORD = "$CLOUDHUB_NOTIFICATION_PASSWORD"
     }
 
     echo "DEBUG: setEnvironment: CLOUDHUB_ENVIRONMENT: ${env.CLOUDHUB_ENVIRONMENT}"
