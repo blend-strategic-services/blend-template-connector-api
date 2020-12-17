@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="blend-template-connector-api-test-suite.xml" />
+	<munit:test name="blend-template-connector-api-test-suite-post:\ext\v1\resourcename:application\json:blend-template-connector-api-configTest" doc:id="5302f5b9-52ee-4924-a2ae-f823c49307d0" description="Test">
+		<munit:behavior >
+			<set-payload value="#[MunitTools::getResourceAsString('test.json')]" doc:name="Set Payload" doc:id="9ba341c3-3e54-4cdb-8407-7a094d8cc948" />
+			<munit-tools:mock-when doc:name="Mock when" doc:id="1a4739b6-9bfd-4b10-bd2f-47383408dcd2" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Flow Reference" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="3203e5d1-3184-49ab-9a4b-f6392c43838f" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="dataExport" attributeName="name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[MunitTools::getResourceAsString('output.json')]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to post:\ext\v1\resourcename:application\json:blend-template-connector-api-config" doc:id="aaeeaf8a-335c-41fc-b9e9-da14ef8bd294" name="post:\ext\v1\resourcename:application\json:blend-template-connector-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="ee923a99-9e55-490f-a7ea-94b2bb6ce3e7" is="#[MunitTools::equalTo('Event processed')]" expression="#[payload.message]"/>
+		</munit:validation>
+	</munit:test>
+
+</mule>
