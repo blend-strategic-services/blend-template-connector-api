@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
-http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd">
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
     <apikit:config name="blend-template-connector-api-config" api="blend-template-connector-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <flow name="blend-template-connector-api-main">
         <http:listener path="/api/*" config-ref="main_listener">
@@ -12,7 +13,37 @@ http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/m
                 <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:error-response>
         </http:listener>
-        <apikit:router config-ref="blend-template-connector-api-config" />
+		<ee:transform doc:name="DD/Sentry" doc:id="7a488273-f594-4abf-b684-1ff0a704a190" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="sentry" ><![CDATA[%dw 2.0
+output application/json
+var intgType = attributes.headers['intg-type'] default ""
+var requestUrl = attributes.rawRequestPath default "" replace /\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/ with("{id}") 
+				replace /[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/ with("{id}")
+---
+{
+	"tenantInstance": attributes.headers['blend-target-instance'] default "",
+	"intgType": intgType,
+	"requestUrl": requestUrl,
+	"requestMethod": attributes.method default ""
+}]]></ee:set-variable>
+				<ee:set-variable variableName="dd" ><![CDATA[%dw 2.0
+output application/java
+var requestUrl = attributes.rawRequestPath default "" replace /\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/ with("{id}") 
+				replace /[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/ with("{id}")
+---
+{
+	"method": attributes.method default "", 
+	"route": requestUrl default "",
+	"env": p('env') default "",
+	"tenantInstance": attributes.headers['blend-target-instance'] default "",
+	"startTime": now() as Number
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<apikit:router config-ref="blend-template-connector-api-config" />
         <error-handler>
             <on-error-propagate type="APIKIT:BAD_REQUEST">
                 <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
@@ -26,6 +57,9 @@ output application/json
                         <ee:set-variable variableName="httpStatus">400</ee:set-variable>
                     </ee:variables>
                 </ee:transform>
+				<async doc:name="Async" doc:id="14ee059c-9734-4bb7-9548-26071504750a" >
+					<flow-ref doc:name="DD feed" doc:id="6b67176d-ff29-4a0c-851e-f9ea1dcf6bdf" name="dd_error_path" />
+				</async>
             </on-error-propagate>
             <on-error-propagate type="APIKIT:NOT_FOUND">
                 <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
@@ -39,6 +73,9 @@ output application/json
                         <ee:set-variable variableName="httpStatus">404</ee:set-variable>
                     </ee:variables>
                 </ee:transform>
+				<async doc:name="Async" doc:id="3c2668df-1274-4e58-a590-10f1a8f6de0a" >
+					<flow-ref doc:name="DD feed" doc:id="1b9024ea-9cce-4ad8-9606-70092d99678a" name="dd_error_path" />
+				</async>
             </on-error-propagate>
             <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
                 <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
@@ -52,6 +89,9 @@ output application/json
                         <ee:set-variable variableName="httpStatus">405</ee:set-variable>
                     </ee:variables>
                 </ee:transform>
+				<async doc:name="Async" doc:id="e1e36efa-d2db-4032-b89b-56ad63f6781a" >
+					<flow-ref doc:name="DD feed" doc:id="e4b34ca9-a8fc-4f3f-9ac7-6f23c77c11f8" name="dd_error_path" />
+				</async>
             </on-error-propagate>
             <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
                 <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
@@ -65,6 +105,9 @@ output application/json
                         <ee:set-variable variableName="httpStatus">406</ee:set-variable>
                     </ee:variables>
                 </ee:transform>
+				<async doc:name="Async" doc:id="7a7ff4bb-c42f-4b43-899a-11b550d8381e" >
+					<flow-ref doc:name="DD feed" doc:id="5b9609a6-155c-4643-bb14-0890bbc37759" name="dd_error_path" />
+				</async>
             </on-error-propagate>
             <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
                 <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
@@ -78,6 +121,9 @@ output application/json
                         <ee:set-variable variableName="httpStatus">415</ee:set-variable>
                     </ee:variables>
                 </ee:transform>
+				<async doc:name="Async" doc:id="820ee8e4-e342-4b13-9b32-eaa1f04d273f" >
+					<flow-ref doc:name="DD feed" doc:id="f03ad0b2-91f2-42ab-909d-9b79d17da406" name="dd_error_path" />
+				</async>
             </on-error-propagate>
             <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
                 <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
@@ -91,6 +137,9 @@ output application/json
                         <ee:set-variable variableName="httpStatus">501</ee:set-variable>
                     </ee:variables>
                 </ee:transform>
+				<async doc:name="Async" doc:id="eaf84219-613f-4ae2-9dbf-d388c4785ebb" >
+					<flow-ref doc:name="DD feed" doc:id="83bd599e-6df9-4db5-9384-f7fe1a63c94f" name="dd_error_path" />
+				</async>
             </on-error-propagate>
         </error-handler>
     </flow>
@@ -122,13 +171,15 @@ output application/json
         </error-handler>
     </flow>
     <flow name="get:\ping:blend-template-connector-api-config">
-		<logger level="INFO" doc:name="Start" doc:id="94e02029-88e9-45a7-af87-d5c204bf1432" message='#[output application/json
+		<logger level="INFO" doc:name="Start" doc:id="94e02029-88e9-45a7-af87-d5c204bf1432" message='#[%dw 2.0
+output application/json
 ---
 {
-   message: "Event received",
-   tenantName : vars.tenant default "",
-   blendLoanId : vars.blendLoanId default "",
-   externalLoanId : vars.externalLoanId default ""
+    tracepoint: "START",
+	text : "Event received from loan exporter api",
+	trackingId : vars.dd.trackingId,	
+	tenant: vars.dd.blendTenant default "N/A",		
+	route : vars.dd.route
 }]' />
 		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="ca187e45-db42-42cd-acdb-1a742d18b985">
             <ee:message>
@@ -141,32 +192,44 @@ output application/json
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
-		<logger level="INFO" doc:name="End" doc:id="9dc1ab2d-1b47-4efd-b30e-fa1c465a4f53" message='#[output application/json
+		<logger level="INFO" doc:name="End" doc:id="9dc1ab2d-1b47-4efd-b30e-fa1c465a4f53" message='#[%dw 2.0
+output application/json
 ---
 {
-   message: "Event received",
-   tenantName : vars.tenant default "",
-   blendLoanId : vars.blendLoanId default "",
-   externalLoanId : vars.externalLoanId default ""
+    tracepoint: "START",
+	text : "Event successfully processed",
+	trackingId : vars.dd.trackingId,	
+	tenant: vars.dd.blendTenant default "N/A",		
+	route : vars.dd.route
 }]' />
+		<async doc:name="Async" doc:id="93f45198-aa6c-4e43-9d6a-79b0c5e72cad" >
+			<flow-ref doc:name="DD feed" doc:id="b882c851-9cac-4844-bc3c-7f02dc4ec5d6" name="dd_success_path" />
+		</async>
     </flow>
     <flow name="post:\ext\v1\resourcename:application\json:blend-template-connector-api-config">
-		<logger level="INFO" doc:name="Start" doc:id="26eaee8f-d9e4-4cd7-b34a-6f56c4a07ff1" message='#[output application/json
+		<logger level="INFO" doc:name="Start" doc:id="26eaee8f-d9e4-4cd7-b34a-6f56c4a07ff1" message='#[%dw 2.0
+output application/json
 ---
 {
-   message: "Event received",
-   tenantName : vars.tenant default "",
-   blendLoanId : vars.blendLoanId default "",
-   externalLoanId : vars.externalLoanId default ""
+    tracepoint: "START",
+	text : "Event received from &lt;customer app name&gt; api",
+	trackingId : vars.dd.trackingId,	
+	tenant: vars.dd.blendTenant default "N/A",		
+	route : vars.dd.route
 }]' />
 		<flow-ref doc:name="Flow Reference" doc:id="3203e5d1-3184-49ab-9a4b-f6392c43838f" name="dataExport"/>
-		<logger level="INFO" doc:name="End" doc:id="305a4ed6-aff3-443d-b69e-8e60c4366bcf" message='#[output application/json
+		<logger level="INFO" doc:name="End" doc:id="305a4ed6-aff3-443d-b69e-8e60c4366bcf" message='#[%dw 2.0
+output application/json
 ---
 {
-   message: "Event processed",
-   tenantName : vars.tenant default "",
-   blendLoanId : vars.blendLoanId default "",
-   externalLoanId : vars.externalLoanId default ""
+    tracepoint: "START",
+	text : "Event successfully processed",
+	trackingId : vars.dd.trackingId,	
+	tenant: vars.dd.blendTenant default "N/A",		
+	route : vars.dd.route
 }]' />
+		<async doc:name="Async" doc:id="8f5d0cf9-9778-4d27-86d3-ffa1cbea86fe" >
+			<flow-ref doc:name="DD feed" doc:id="f79ebe2c-283d-4d7d-8f48-94bcd904c653" name="dd_success_path" />
+		</async>
     </flow>
 </mule>

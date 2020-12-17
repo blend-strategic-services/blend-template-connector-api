@@ -345,12 +345,6 @@
         </dependency>
         <dependency>
             <groupId>org.mule.connectors</groupId>
-            <artifactId>mule-http-connector</artifactId>
-            <version>1.5.12</version>
-            <classifier>mule-plugin</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.mule.connectors</groupId>
             <artifactId>mule-vm-connector</artifactId>
             <version>2.0.0</version>
             <classifier>mule-plugin</classifier>
@@ -414,6 +408,18 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.2.8</version>
+        </dependency>
+    	<dependency>
+            <groupId>dae0cf96-56ae-4531-8ac8-994a57b3a880</groupId>
+            <artifactId>datadog-mule-extension</artifactId>
+            <version>1.0.2</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+    	<dependency>
+            <groupId>org.mule.connectors</groupId>
+            <artifactId>mule-http-connector</artifactId>
+            <version>1.5.11</version>
+            <classifier>mule-plugin</classifier>
         </dependency>
     </dependencies>
 

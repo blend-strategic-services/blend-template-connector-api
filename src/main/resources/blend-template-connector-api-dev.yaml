@@ -44,4 +44,11 @@ psqlSysApi:
     port: "8082"
     username: "Contact Blend IE for username"
     password: "Contact Blend IE for username"
-      
+dataDog:
+  host: "api.datadoghq.com"
+  apiKey: "![wX6HWy4OCV6nbEUNk/EOJOBIhpZyhstdqGnw8wWImYiq715/oMk1Kg==]"    
+  
+sentry:
+  dsn: "![c3Ec5KIoiMxQR1vqWd0XanxvHntJg9q4NT/7yeLdrYn5NCl3XKeibz6tX/a8xgKfdzfz3LMccj82J+W7/DTdNhvkbNiGioB7]"
+  projectId: "120"
+  apiKey: "![c3Ec5KIoiMxQR1vqWd0XanxvHntJg9q4NT/7yeLdrYmA1OmD6nWalw==]"      

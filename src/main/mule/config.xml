@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:db="http://www.mulesoft.org/schema/mule/db"
-	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
-	xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
-	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+<mule xmlns:datadog-logger="http://www.mulesoft.org/schema/mule/datadog-logger"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+	xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+	xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd
 http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
-http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/datadog-logger http://www.mulesoft.org/schema/mule/datadog-logger/current/mule-datadog-logger.xsd">
 	<http:listener-config name="main_listener" doc:name="HTTP Listener config" doc:id="dcb708a3-87db-4f0c-a266-cf608e1aceea" >
 		<http:listener-connection host="0.0.0.0" port="${secure::listener.https.port}" protocol="HTTPS">
 			<tls:context >
@@ -36,4 +37,5 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 	<db:config name="Database_Config" doc:name="Database Config" doc:id="b30f4d82-bcf6-4f69-8d16-48fccd3f07dd" >
 		<db:generic-connection url="jdbc:postgresql://${secure::psqlDb.host}:${secure::psqlDb.port}/postgres" driverClassName="org.postgresql.Driver" user="${secure::psqlDb.username}" password="${secure::psqlDb.password}" />
 	</db:config>
+	<datadog-logger:config name="DataDog_Connector_Config" doc:name="DataDog Connector Config" doc:id="d22fd4d6-7624-4b86-a540-e1946a8e2ecd" host="#[p('secure::dataDog.host')]" applicationKey="#[p('secure::dataDog.applicationKey')]" apiKey="#[p('secure::dataDog.apiKey')]" />
 </mule>
