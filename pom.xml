@@ -1,92 +1,473 @@
-pipeline {
-    agent any
-    tools {
-        maven 'maven-3.6.3'
-    }
-    stages {
-        stage('Unit Test') {
-            steps {
-                script {
-                    setEnvironmentVars(params.environment)
-                }
-                slackSend (color: '#FFFF00', message: "${env.ENV} > STARTED : Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (<${env.BUILD_URL}|Open>)")
-                slackSend (color: '#FFFF00', message: "${env.ENV} > Executing Tests: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (<${env.BUILD_URL}|Open>)")
-                echo 'Running tests...'
-                sh 'mvn -DENV=' + "${env.ENV}" + ' clean test'
-            }
-        }
-        stage('Deploy to Binary Repo') {
-            when {
-                anyOf {
-                    expression { params.environment == "Production" };
-                }
-            }
-            steps {
-                slackSend (color: '#FFFF00', message: "${env.ENV} > Deploying to Nexus: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (<${env.BUILD_URL}|Open>)")
-                echo 'Deploy to Binary Repo ' + "${params.environment}"
-                sh 'mvn -DENV=' + "${env.ENV}" + ' -DskipTests deploy'
-            }
-        }
-        stage('Deploy CloudHub') {
-            environment {
-                ANYPOINT_CREDENTIALS = credentials('anypoint.credentials')
-            }
-            steps {
-                sh 'echo $PATH'
-                slackSend (color: '#FFFF00', message: "${env.ENV} > Deploying to Cloudhub: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (<${env.BUILD_URL}|Open>)")
-                sh 'mvn deploy -DENV=' + "${env.ENV}" + ' -DskipTests -DmuleDeploy -Dmule.version=' + "${env.VERSION}" + ' -Danypoint.username=${ANYPOINT_CREDENTIALS_USR} -Danypoint.password=${ANYPOINT_CREDENTIALS_PSW} -e'
-            }
-        }
-    }
-    post {
-        failure {
-            slackSend color: 'danger', message: "@here \n${env.ENV} > FAILED ${env.JOB_NAME} [${env.BUILD_NUMBER}] (<${env.BUILD_URL}|Open>)"
-        }
-        success {
-            slackSend color: 'good', message: "${env.ENV} > SUCCESS ${env.JOB_NAME} [${env.BUILD_NUMBER}] (<${env.BUILD_URL}|Open>)"
-        }
-    }
-}
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-void setEnvironmentVars(String envParam) {
-    if (envParam != null){
-        echo "DEBUG: envParam=$envParam"
+    <groupId>dae0cf96-56ae-4531-8ac8-994a57b3a880</groupId>
+    <artifactId>blend-template-connector-api</artifactId>    <!-- Change to API name i.e. myapi-system-api -->
+    <version>1.0.0</version>    <!-- Change to API version: 1.0.0-->
+    <packaging>mule-application</packaging>
+    <name>blend-template-connector-api</name>    <!-- Change to API Name i.e. myapi system API-->
 
-        env.CLOUDHUB_ENVIRONMENT = envParam
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <mule.maven.plugin.version>3.3.5</mule.maven.plugin.version>
+        <munit.version>2.2.1</munit.version>
+    </properties>
+<profiles>
 
-        if (env.CLOUDHUB_ENVIRONMENT == "Development") {
-            env.ENV = "dev"
-            env.VERSION = "4.3.0"              
-        } else if (env.CLOUDHUB_ENVIRONMENT == "Beta") {
-            env.ENV = "beta"
-            env.VERSION = "4.3.0"              
-        } else if (env.CLOUDHUB_ENVIRONMENT == "Production") {
-            env.ENV = "prod"
-            env.VERSION = "4.2.2"              
-        }
-    } else {
-        env.CLOUDHUB_ENVIRONMENT = "Development"
-        env.ENV = "dev"
-        env.VERSION = "4.3.0"          
-    }
 
-    withCredentials([usernamePassword(credentialsId: 'anypoint.client.' + env.ENV, passwordVariable: 'ANYPOINT_CLIENT_SECRET', usernameVariable: 'ANYPOINT_CLIENT_ID')]) {
-        env.ANYPOINT_CLIENT_ID = "$ANYPOINT_CLIENT_ID"
-        env.ANYPOINT_CLIENT_SECRET = "$ANYPOINT_CLIENT_SECRET"
-    }
-	withCredentials([usernamePassword(credentialsId: 'logger', passwordVariable: 'LOGGER_TOKEN', usernameVariable: 'LOGGER_URL')]) {
-        env.LOGGER_URL = "$LOGGER_URL"
-        env.LOGGER_TOKEN = "$LOGGER_TOKEN"
-    }
-    withCredentials([string(credentialsId: 'masterKey.' + env.ENV, variable: 'MASTER_KEY')]) {
-        env.MASTER_KEY = "$MASTER_KEY"
-    }
-    withCredentials([usernamePassword(credentialsId: 'cloudhub.notification', passwordVariable: 'CLOUDHUB_NOTIFICATION_PASSWORD', usernameVariable: 'CLOUDHUB_NOTIFICATION_USERNAME')]) {
-        env.CLOUDHUB_NOTIFICATION_USERNAME = "$CLOUDHUB_NOTIFICATION_USERNAME"
-        env.CLOUDHUB_NOTIFICATION_PASSWORD = "$CLOUDHUB_NOTIFICATION_PASSWORD"
-    }
+<profile>
+   <id>dev</id>
+   <activation>
+      <property>
+         <name>ENV</name>
+         <value>dev</value>
+      </property>
+   </activation>
+   
+      <build>
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/app</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.mule.tools.maven</groupId>
+                <artifactId>mule-maven-plugin</artifactId>
+                <version>${mule.maven.plugin.version}</version>
+                <extensions>true</extensions>
+                <dependencies>
+                    <dependency>
+                        <groupId>javax.activation</groupId>
+                        <artifactId>activation</artifactId>
+                        <version>1.1.1</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>javax.xml.bind</groupId>
+                        <artifactId>jaxb-api</artifactId>
+                        <version>2.3.0</version>
+                    </dependency>
+                </dependencies>
 
-    echo "DEBUG: setEnvironment: CLOUDHUB_ENVIRONMENT: ${env.CLOUDHUB_ENVIRONMENT}"
-    echo "DEBUG: setEnvironment: ENV: ${env.ENV}"
-    echo "DEBUG: setEnvironment: PATH: ${env.PATH}"
-}
+                <configuration>
+                    <filterAppDirectory>true</filterAppDirectory>
+                    <classifier>mule-application</classifier>
+                    <cloudHubDeployment>
+                        <uri>https://anypoint.mulesoft.com</uri>
+                        <muleVersion>4.2.2</muleVersion>
+                        <!-- Anypoint platform credentials that has Runtime deployer permissions -->
+                        <!--                        <username>${username}</username> -->
+                        <!--                        <password>${password}</password> -->
+                        <applicationName>blend-template-connector-api-${ENV}</applicationName>                        <!-- api.label is used to denote the specific bank instance; app.Ext makes it unique for a given env (typically is set to beta, sandbox. Prod does not have this ext) -->
+                        <environment>${CLOUDHUB_ENVIRONMENT}</environment>                        <!-- sandbox, beta, or prod -->
+                        <properties>
+                            <anypoint.platform.base_uri>https://anypoint.mulesoft.com/</anypoint.platform.base_uri>
+                            <anypoint.platform.analytics_base_uri>https://analytics-ingest.anypoint.mulesoft.com/</anypoint.platform.analytics_base_uri>
+                            <env>${ENV}</env>                            <!-- sandbox, beta, or prod. Used to identify which properties file is used at runtime -->
+                            <anypoint.platform.client_id>${ANYPOINT_CLIENT_ID}</anypoint.platform.client_id>                            <!-- client id/secret for environment -->
+                            <anypoint.platform.client_secret>${ANYPOINT_CLIENT_SECRET}</anypoint.platform.client_secret>
+                            <masterKey>${MASTER_KEY}</masterKey>                            <!-- used to decode any encrypted values in properties files -->
+                            <loggerUrl>${LOGGER_URL}</loggerUrl>
+                            <loggerToken>${LOGGER_TOKEN}</loggerToken>
+                        </properties>
+                        <region>us-east-1</region>
+                        <workerType>Micro</workerType>
+                        <workers>2</workers>
+                    </cloudHubDeployment>
+                <sharedLibraries>
+                        <sharedLibrary>
+                            <groupId>org.postgresql</groupId>
+                            <artifactId>postgresql</artifactId>
+                        </sharedLibrary>
+                    </sharedLibraries>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.mulesoft.munit.tools</groupId>
+                <artifactId>munit-maven-plugin</artifactId>
+                <version>${munit.version}</version>
+                <executions>
+                    <execution>
+                        <id>test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>test</goal>
+                            <goal>coverage-report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <coverage>
+                        <runCoverage>true</runCoverage>
+                        <formats>
+                            <format>html</format>
+                        </formats>
+                    </coverage>
+                </configuration>
+            </plugin>
+        </plugins>
+
+    </build>
+</profile>
+
+
+
+<profile>
+   <id>test</id>
+   <activation>
+      <property>
+         <name>ENV</name>
+         <value>test</value>
+      </property>
+   </activation>
+      <build>
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/app</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.mule.tools.maven</groupId>
+                <artifactId>mule-maven-plugin</artifactId>
+                <version>${mule.maven.plugin.version}</version>
+                <extensions>true</extensions>
+                <dependencies>
+                    <dependency>
+                        <groupId>javax.activation</groupId>
+                        <artifactId>activation</artifactId>
+                        <version>1.1.1</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>javax.xml.bind</groupId>
+                        <artifactId>jaxb-api</artifactId>
+                        <version>2.3.0</version>
+                    </dependency>
+                </dependencies>
+
+                <configuration>
+                    <filterAppDirectory>true</filterAppDirectory>
+                    <classifier>mule-application</classifier>
+                    <cloudHubDeployment>
+                        <uri>https://anypoint.mulesoft.com</uri>
+                        <muleVersion>4.2.2</muleVersion>
+                        <!-- Anypoint platform credentials that has Runtime deployer permissions -->
+                        <!--                        <username>${username}</username> -->
+                        <!--                        <password>${password}</password> -->
+                        <applicationName>blend-template-connector-api-${ENV}</applicationName>                        <!-- api.label is used to denote the specific bank instance; app.Ext makes it unique for a given env (typically is set to beta, sandbox. Prod does not have this ext) -->
+                        <environment>${CLOUDHUB_ENVIRONMENT}</environment>                        <!-- sandbox, beta, or prod -->
+                        <properties>
+                            <anypoint.platform.base_uri>https://anypoint.mulesoft.com/</anypoint.platform.base_uri>
+                            <anypoint.platform.analytics_base_uri>https://analytics-ingest.anypoint.mulesoft.com/</anypoint.platform.analytics_base_uri>
+                            <env>${ENV}</env>                            <!-- sandbox, beta, or prod. Used to identify which properties file is used at runtime -->
+                            <anypoint.platform.client_id>${ANYPOINT_CLIENT_ID}</anypoint.platform.client_id>                            <!-- client id/secret for environment -->
+                            <anypoint.platform.client_secret>${ANYPOINT_CLIENT_SECRET}</anypoint.platform.client_secret>
+                            <masterKey>${MASTER_KEY}</masterKey>                            <!-- used to decode any encrypted values in properties files -->
+                            <loggerUrl>${LOGGER_URL}</loggerUrl>
+                            <loggerToken>${LOGGER_TOKEN}</loggerToken>
+                        </properties>
+                        <region>us-east-1</region>
+                        <workerType>Micro</workerType>
+                        <workers>1</workers>
+                    </cloudHubDeployment>
+                <sharedLibraries>
+                        <sharedLibrary>
+                            <groupId>org.postgresql</groupId>
+                            <artifactId>postgresql</artifactId>
+                        </sharedLibrary>
+                    </sharedLibraries>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.mulesoft.munit.tools</groupId>
+                <artifactId>munit-maven-plugin</artifactId>
+                <version>${munit.version}</version>
+                <executions>
+                    <execution>
+                        <id>test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>test</goal>
+                            <goal>coverage-report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <coverage>
+                        <runCoverage>true</runCoverage>
+                        <formats>
+                            <format>html</format>
+                        </formats>
+                    </coverage>
+                </configuration>
+            </plugin>
+        </plugins>
+
+    </build>
+</profile>
+
+
+<profile>
+   <id>prod</id>
+   <activation>
+      <property>
+         <name>ENV</name>
+         <value>prod</value>
+      </property>
+   </activation>
+   
+      <build>
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/app</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.mule.tools.maven</groupId>
+                <artifactId>mule-maven-plugin</artifactId>
+                <version>${mule.maven.plugin.version}</version>
+                <extensions>true</extensions>
+                <dependencies>
+                    <dependency>
+                        <groupId>javax.activation</groupId>
+                        <artifactId>activation</artifactId>
+                        <version>1.1.1</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>javax.xml.bind</groupId>
+                        <artifactId>jaxb-api</artifactId>
+                        <version>2.3.0</version>
+                    </dependency>
+                </dependencies>
+
+                <configuration>
+                    <filterAppDirectory>true</filterAppDirectory>
+                    <classifier>mule-application</classifier>
+                    <cloudHubDeployment>
+                        <uri>https://anypoint.mulesoft.com</uri>
+                        <muleVersion>4.2.2</muleVersion>
+                        <!-- Anypoint platform credentials that has Runtime deployer permissions -->
+                        <!--                        <username>${username}</username> -->
+                        <!--                        <password>${password}</password> -->
+                        <applicationName>blend-template-connector-api-${ENV}</applicationName>                        <!-- api.label is used to denote the specific bank instance; app.Ext makes it unique for a given env (typically is set to beta, sandbox. Prod does not have this ext) -->
+                        <environment>${CLOUDHUB_ENVIRONMENT}</environment>                        <!-- sandbox, beta, or prod -->
+                        <properties>
+                            <anypoint.platform.base_uri>https://anypoint.mulesoft.com/</anypoint.platform.base_uri>
+                            <anypoint.platform.analytics_base_uri>https://analytics-ingest.anypoint.mulesoft.com/</anypoint.platform.analytics_base_uri>
+                            <env>${ENV}</env>                            <!-- sandbox, beta, or prod. Used to identify which properties file is used at runtime -->
+                            <anypoint.platform.client_id>${ANYPOINT_CLIENT_ID}</anypoint.platform.client_id>                            <!-- client id/secret for environment -->
+                            <anypoint.platform.client_secret>${ANYPOINT_CLIENT_SECRET}</anypoint.platform.client_secret>
+                            <masterKey>${MASTER_KEY}</masterKey>                            <!-- used to decode any encrypted values in properties files -->
+                            <loggerUrl>${LOGGER_URL}</loggerUrl>
+                            <loggerToken>${LOGGER_TOKEN}</loggerToken>
+                        </properties>
+                        <region>us-east-1</region>
+                        <workerType>Micro</workerType>
+                        <workers>1</workers>
+                    </cloudHubDeployment>
+                <sharedLibraries>
+                        <sharedLibrary>
+                            <groupId>org.postgresql</groupId>
+                            <artifactId>postgresql</artifactId>
+                        </sharedLibrary>
+                    </sharedLibraries>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.mulesoft.munit.tools</groupId>
+                <artifactId>munit-maven-plugin</artifactId>
+                <version>${munit.version}</version>
+                <executions>
+                    <execution>
+                        <id>test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>test</goal>
+                            <goal>coverage-report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <coverage>
+                        <runCoverage>true</runCoverage>
+                        <formats>
+                            <format>html</format>
+                        </formats>
+                    </coverage>
+                </configuration>
+            </plugin>
+        </plugins>
+
+    </build>
+</profile>
+
+
+</profiles>
+
+ 
+
+    <dependencies>
+        <dependency>
+            <groupId>com.mulesoft.modules</groupId>
+            <artifactId>mule-secure-configuration-property-module</artifactId>
+            <version>1.2.0</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+        <dependency>
+            <groupId>dae0cf96-56ae-4531-8ac8-994a57b3a880</groupId>
+            <artifactId>json-logger</artifactId>
+            <version>1.0.2</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.mule.modules</groupId>
+            <artifactId>mule-apikit-module</artifactId>
+            <version>1.3.8</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.mule.connectors</groupId>
+            <artifactId>mule-vm-connector</artifactId>
+            <version>2.0.0</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.mule.connectors</groupId>
+            <artifactId>mule-sockets-connector</artifactId>
+            <version>1.1.5</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+        <dependency>
+            <groupId>com.mulesoft.connectors</groupId>
+            <artifactId>mule-cloudhub-connector</artifactId>
+            <version>1.0.1</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+        <dependency>
+            <groupId>com.mulesoft.munit</groupId>
+            <artifactId>munit-runner</artifactId>
+            <version>2.2.1</version>
+            <classifier>mule-plugin</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.mulesoft.munit</groupId>
+            <artifactId>munit-tools</artifactId>
+            <version>2.2.1</version>
+            <classifier>mule-plugin</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mule.modules</groupId>
+            <artifactId>mule-validation-module</artifactId>
+            <version>1.4.0</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.mule.modules</groupId>
+            <artifactId>mule-xml-module</artifactId>
+            <version>1.2.2</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.13.3</version>
+        </dependency>
+    	<dependency>
+            <groupId>com.mulesoft.connectors</groupId>
+            <artifactId>mule-amazon-s3-connector</artifactId>
+            <version>5.6.1</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+    	<dependency>
+            <groupId>org.mule.connectors</groupId>
+            <artifactId>mule-db-connector</artifactId>
+            <version>1.8.1</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+    	<dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.8</version>
+        </dependency>
+    	<dependency>
+            <groupId>dae0cf96-56ae-4531-8ac8-994a57b3a880</groupId>
+            <artifactId>datadog-mule-extension</artifactId>
+            <version>1.0.2</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+    	<dependency>
+            <groupId>org.mule.connectors</groupId>
+            <artifactId>mule-http-connector</artifactId>
+            <version>1.5.11</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>anypoint-exchange</id>
+            <name>Anypoint Exchange</name>
+            <url>https://maven.anypoint.mulesoft.com/api/v1/maven</url>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <id>mulesoft-releases</id>
+            <name>MuleSoft Releases Repository</name>
+            <url>https://repository.mulesoft.org/releases/</url>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <id>mulesoft-nexus-ee-releases-ee</id>
+            <name>MuleEE Releases Repository</name>
+            <url>https://repository.mulesoft.org/nexus-ee/content/repositories/releases-ee/</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>mulesoft-releases</id>
+            <name>mulesoft release repository</name>
+            <layout>default</layout>
+            <url>https://repository.mulesoft.org/releases/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <distributionManagement>
+        <repository>
+            <id>nexus-releases</id>
+            <name>Nexus Repository</name>
+            <url>http://jenkins-solutions.prod.blendlabs.com:8095/repository/maven-releases</url>
+            <layout>default</layout>
+        </repository>
+    </distributionManagement>
+</project>
