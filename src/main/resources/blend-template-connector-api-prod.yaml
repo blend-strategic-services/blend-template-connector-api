@@ -38,3 +38,13 @@ db:
   port: "5432"
   username: "Contact IE for username"
   password: "Contact IE for password"
+
+dataDog:
+  host: "api.datadoghq.com"
+  apiKey: "![slnaw0cVqED75y8X8YGCtK6g7Ifpp1NjkG7FaSLHMlb7vdZebC/xAQ==]"
+  applicationKey: "![88GK8h6ozT6tm6ruZQ/JABNm6eQytyBIIpHOY1EKCb3Jy/TgEBR9fnoTTV89NRVp]"  
+
+sentry:
+  dsn: "![Iqo2t1zlTFw7glG76dGE1GjLTKBFL6KjfqzQdC8LJMRYI24hGjvY/tDP3WQM8lRsr/jxfP00B7eiIvc/B/+6yCDUEVVun598]"
+  projectId: "120"
+  apiKey: "![Iqo2t1zlTFw7glG76dGE1GjLTKBFL6KjfqzQdC8LJMQFd0cs/yKr3Q==]"     
