@@ -2,13 +2,7 @@ api:
   id: "tbd"
 
 keystore:
-  password: "![rCOBzPxBFfrjDn9jgnp1zo0EczQIWpCZgCoEQZRA4Y4eGxwWaPThzkJqYuPKZhJR]"
-
-cloudhubConnection:
-  username: "no-reply-integrations"
-  password: "![XINOsf0Tso6BR1Hujmu9bZfkHO5l3zGh]"
-  domain: "blend-template-connector-api-dev"
-  envId: "d2ab3fb4-221a-4a1a-9941-6a1011040bf6"
+  password: "![OapAx+Ur2iu76TucfBGp0aK/G7ppA78KXZlfKLzus4FBZhVaSos9vDMewNREmjjI]"
 
 listener:
   https:
@@ -17,21 +11,21 @@ listener:
 blend:
   host: "mule-worker-blend-sys-api-dev.us-e1.cloudhub.io"
   port: "8082"
-  apiVersionHeader: "3.1.0"
-  username: "![VW9ta0kNHfSzMG7OhLPKzzlO2LakJANTiUfeYyfs1qn48SQ2n8yBRQ==]"
-  password: "![nxtLAEqVyyYcnuJRC7qaNgAvw7+WTxzXPFivs3xDWolUJ5MBhSAHWg==]"
+  apiVersionHeader: "3.3.0"
+  username: "![/M3XncZNRNJMpEt6Hn4WQQEjbPWtaP6PLhrsUmMWLNaDR01pb7sbHw==]"
+  password: "![fdpzCSnjY0VuwdsTtCdIbeGo8HKPyF0dsW3OX6uEjRPe8bg1VnCp8w==]"
 
 msutil:
   host: "mule-worker-blend-msutil-api-dev.us-e1.cloudhub.io"
   port: "8082"
-  username: "![VW9ta0kNHfSzMG7OhLPKzzlO2LakJANTiUfeYyfs1qn48SQ2n8yBRQ==]"
-  password: "![nxtLAEqVyyYcnuJRC7qaNgAvw7+WTxzXPFivs3xDWolUJ5MBhSAHWg==]"
+  username: "![/M3XncZNRNJMpEt6Hn4WQQEjbPWtaP6PLhrsUmMWLNaDR01pb7sbHw==]"
+  password: "![fdpzCSnjY0VuwdsTtCdIbeGo8HKPyF0dsW3OX6uEjRPe8bg1VnCp8w==]"
 
 externalProxy:
   host: "mule-worker-blend-external-proxy-api-dev.us-e1.cloudhub.io"
   port: "8082"
-  username: "![VW9ta0kNHfSzMG7OhLPKzzlO2LakJANTiUfeYyfs1qn48SQ2n8yBRQ==]"
-  password: "![nxtLAEqVyyYcnuJRC7qaNgAvw7+WTxzXPFivs3xDWolUJ5MBhSAHWg==]" 
+  username: "![/M3XncZNRNJMpEt6Hn4WQQEjbPWtaP6PLhrsUmMWLNaDR01pb7sbHw==]"
+  password: "![fdpzCSnjY0VuwdsTtCdIbeGo8HKPyF0dsW3OX6uEjRPe8bg1VnCp8w==]"
 
 psqlDb:
   host: "localhost"
