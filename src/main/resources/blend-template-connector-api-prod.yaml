@@ -2,13 +2,7 @@ api:
   id: "tbd"
 
 keystore:
-  password: "![gY/m1n/7Akdlt30dOIwf2LovR9q7qa0Vmnh4amodRz+3pTxWuu6tmnyo8IJ4RJN9]"
-
-cloudhubConnection:
-  username: "no-reply-integrations"
-  password: "![WISSqjTOS0iI3S43MLlxoGcShHk9TryF]"
-  domain: "blend-template-connector-api-prod"
-  envId: "ecf5464e-6a54-43db-8933-64467ed64a6e"
+  password: "![/LT7zeTqhgo0Lf4s1pKHhZzbiwY47HdSZQ/rSXf/oTzUxrKF3U6SmbmUR6GhHSxa]"
 
 listener:
   https:
@@ -17,34 +11,34 @@ listener:
 blend:
   host: "mule-worker-internal-blend-sys-api-prod.us-e1.cloudhub.io"
   port: "8092"
-  apiVersionHeader: "3.1.0"
-  username: "![O8PzdTq9It6j0fcd9Zsrere7TBvYLSngK80hQ6pSBqsKc0zdnchLuQ==]"
-  password: "![W6ms2A9ohRWqoxBesvgVCrTesuFGTkBMTmKp5y869NNV2ROuESxmng==]"
+  apiVersionHeader: "3.3.0"
+  username: "![hEk286hYMCOm1QT2STR6NESdo6N/RxbIPpodFixtnsly1ftxxZOuAA==]"
+  password: "![Z8tMcxsWjM49fGEAaM9p3EbOLiVWVU1C/57n7tB6gCB/T6YjZ/pNsA==]"
 
 msutil:
   host: "mule-worker-internal-blend-msutil-api-prod.us-e1.cloudhub.io"
   port: "8092"
-  username: "![O8PzdTq9It6j0fcd9Zsrere7TBvYLSngK80hQ6pSBqsKc0zdnchLuQ==]"
-  password: "![W6ms2A9ohRWqoxBesvgVCrTesuFGTkBMTmKp5y869NNV2ROuESxmng==]"
+  username: "![hEk286hYMCOm1QT2STR6NESdo6N/RxbIPpodFixtnsly1ftxxZOuAA==]"
+  password: "![Z8tMcxsWjM49fGEAaM9p3EbOLiVWVU1C/57n7tB6gCB/T6YjZ/pNsA==]"
 
 externalProxyAPI:
   host: "mule-worker-internal-blend-external-proxy-api-prod.us-e1.cloudhub.io"
   port: "8092"
-  username: "![O8PzdTq9It6j0fcd9Zsrere7TBvYLSngK80hQ6pSBqsKc0zdnchLuQ==]"
-  password: "![W6ms2A9ohRWqoxBesvgVCrTesuFGTkBMTmKp5y869NNV2ROuESxmng==]"
+  username: "![hEk286hYMCOm1QT2STR6NESdo6N/RxbIPpodFixtnsly1ftxxZOuAA==]"
+  password: "![Z8tMcxsWjM49fGEAaM9p3EbOLiVWVU1C/57n7tB6gCB/T6YjZ/pNsA==]"
 
-db:
+dataDog:
+  host: "api.datadoghq.com"
+  applicationKey: "![v2WuVAR3oqeGwOPUkL8Kt6Gy9M2wxJuKiJlT3iPfqxbfP7ELVpmdWZDFny2P/JDi]"
+  apiKey: "![1OhUHhlGEdY3gLpqgGAJ/1tSlTyLWMYviz83ohwFUaqPw5+BEVZa1w==]"
+
+sentry:
+  dsn: "![qUR91UymAQ0IlghrcFtRvvZ36OHF0VxDM2tFuuqIOLxqEwWKEejkYGskIjxbTAzMI/QhOEYNVnwOxsbHREkTfNsWtCqJwLxk]"
+  projectId: "120"
+  apiKey: "![qUR91UymAQ0IlghrcFtRvvZ36OHF0VxDM2tFuuqIOLyG1e71oCYaAA==]"
+
+psqlDb:
   host: "mulesoft-prod.cukqgxfgcjxg.us-east-1.rds.amazonaws.com"
   port: "5432"
   username: "Contact IE for username"
   password: "Contact IE for password"
-
-dataDog:
-  host: "api.datadoghq.com"
-  apiKey: "![slnaw0cVqED75y8X8YGCtK6g7Ifpp1NjkG7FaSLHMlb7vdZebC/xAQ==]"
-  applicationKey: "![88GK8h6ozT6tm6ruZQ/JABNm6eQytyBIIpHOY1EKCb3Jy/TgEBR9fnoTTV89NRVp]"  
-
-sentry:
-  dsn: "![Iqo2t1zlTFw7glG76dGE1GjLTKBFL6KjfqzQdC8LJMRYI24hGjvY/tDP3WQM8lRsr/jxfP00B7eiIvc/B/+6yCDUEVVun598]"
-  projectId: "120"
-  apiKey: "![Iqo2t1zlTFw7glG76dGE1GjLTKBFL6KjfqzQdC8LJMQFd0cs/yKr3Q==]"     
