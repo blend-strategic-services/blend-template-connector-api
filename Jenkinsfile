@@ -62,7 +62,7 @@ void setEnvironmentVars(String envParam) {
             env.VERSION = "4.3.0"              
         } else if (env.CLOUDHUB_ENVIRONMENT == "Production") {
             env.ENV = "prod"
-            env.VERSION = "4.2.2"              
+            env.VERSION = "4.3.0"              
         }
     } else {
         env.CLOUDHUB_ENVIRONMENT = "Development"
