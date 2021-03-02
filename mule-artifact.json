@@ -4,6 +4,7 @@
 		"anypoint.platform.client_secret",
 		"secret.key",
 		"masterKey",
-		"loggerToken"
+		"loggerToken",
+		"secretKey"
 	]
 }

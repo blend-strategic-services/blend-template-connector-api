@@ -78,7 +78,7 @@ void setEnvironmentVars(String envParam) {
         env.LOGGER_URL = "$LOGGER_URL"
         env.LOGGER_TOKEN = "$LOGGER_TOKEN"
     }
-    withCredentials([string(credentialsId: 'masterKey.' + env.ENV, variable: 'MASTER_KEY')]) {
+    withCredentials([string(credentialsId: env.ENV + '.secretKey', variable: 'MASTER_KEY')]) {
         env.MASTER_KEY = "$MASTER_KEY"
     }
     withCredentials([usernamePassword(credentialsId: 'cloudhub.notification', passwordVariable: 'CLOUDHUB_NOTIFICATION_PASSWORD', usernameVariable: 'CLOUDHUB_NOTIFICATION_USERNAME')]) {
