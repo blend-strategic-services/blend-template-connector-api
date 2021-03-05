@@ -13,11 +13,11 @@ http://www.mulesoft.org/schema/mule/datadog-logger http://www.mulesoft.org/schem
 <http:listener-config name="main_listener" doc:name="HTTP Listener config" doc:id="dcb708a3-87db-4f0c-a266-cf608e1aceea" >
 <http:listener-connection host="0.0.0.0" port="${secure::listener.https.port}" protocol="HTTPS">
 <tls:context >
-<tls:key-store type="pkcs12" path="keystore-blend-merkle-connector-api.p12" keyPassword="${secure::keystore.password}" password="${secure::keystore.password}" />
+<tls:key-store type="pkcs12" path="keystore-blend-template-connector-api.p12" keyPassword="${secure::keystore.password}" password="${secure::keystore.password}" />
 </tls:context>
 </http:listener-connection>
 </http:listener-config>
-<configuration-properties doc:name="configuration_properties" doc:id="b1b6b65c-20ab-48d6-b374-0d1160fe846d" file="blend-merkle-connector-api-global.yaml" />
+<configuration-properties doc:name="configuration_properties" doc:id="b1b6b65c-20ab-48d6-b374-0d1160fe846d" file="blend-template-connector-api-global.yaml" />
 <global-property doc:name="Global Property" doc:id="d9ba1573-7be0-4cb5-a270-047b742a0b2d" name="env" value="test" />
 
 <http:request-config name="msutil_config" doc:name="HTTP Request configuration" doc:id="e9e6c645-88a2-450f-869c-215f9043e24d">
@@ -30,7 +30,7 @@ http://www.mulesoft.org/schema/mule/datadog-logger http://www.mulesoft.org/schem
 </http:authentication>
 </http:request-connection>
 </http:request-config>
-<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="72499f6e-d92f-4cbe-9b9b-d1470c0e2680" file="blend-merkle-connector-api-${env}.yaml" key="${masterKey}" >
+<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="72499f6e-d92f-4cbe-9b9b-d1470c0e2680" file="blend-template-connector-api-${env}.yaml" key="${masterKey}" >
 <secure-properties:encrypt algorithm="Blowfish" />
 </secure-properties:config>
 <global-property doc:name="Global Property" doc:id="109d5415-f22a-473f-bb4c-d38da283da5b" name="masterKey" value="placeholder" />
