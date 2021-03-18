@@ -57,17 +57,25 @@ void setEnvironmentVars(String envParam) {
         if (env.CLOUDHUB_ENVIRONMENT == "Development") {
             env.ENV = "dev"
             env.VERSION = "4.3.0"              
+            env.CLOUDHUB_WORKERTYPE = "Micro"
+            env.CLOUDHUB_WORKERS = "1"
         } else if (env.CLOUDHUB_ENVIRONMENT == "Beta") {
             env.ENV = "beta"
             env.VERSION = "4.3.0"              
+            env.CLOUDHUB_WORKERTYPE = "Micro"
+            env.CLOUDHUB_WORKERS = "1"
         } else if (env.CLOUDHUB_ENVIRONMENT == "Production") {
             env.ENV = "prod"
             env.VERSION = "4.3.0"              
+            env.CLOUDHUB_WORKERTYPE = "Micro"
+            env.CLOUDHUB_WORKERS = "1"
         }
     } else {
         env.CLOUDHUB_ENVIRONMENT = "Development"
         env.ENV = "dev"
         env.VERSION = "4.3.0"          
+        env.CLOUDHUB_WORKERTYPE = "Micro"
+        env.CLOUDHUB_WORKERS = "1"
     }
 
     withCredentials([usernamePassword(credentialsId: 'anypoint.client.' + env.ENV, passwordVariable: 'ANYPOINT_CLIENT_SECRET', usernameVariable: 'ANYPOINT_CLIENT_ID')]) {
