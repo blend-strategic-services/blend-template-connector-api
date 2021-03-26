@@ -12,7 +12,7 @@ pipeline {
                 slackSend (color: '#FFFF00', message: "${env.ENV} > STARTED : Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (<${env.BUILD_URL}|Open>)")
                 slackSend (color: '#FFFF00', message: "${env.ENV} > Executing Tests: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (<${env.BUILD_URL}|Open>)")
                 echo 'Running tests...'
-                sh 'mvn -DENV=' + "${env.ENV}" + ' clean test'
+                sh 'mvn clean test'
             }
         }
         stage('Deploy to Binary Repo') {
@@ -24,7 +24,7 @@ pipeline {
             steps {
                 slackSend (color: '#FFFF00', message: "${env.ENV} > Deploying to Nexus: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (<${env.BUILD_URL}|Open>)")
                 echo 'Deploy to Binary Repo ' + "${params.environment}"
-                sh 'mvn -DENV=' + "${env.ENV}" + ' -DskipTests deploy'
+                sh 'mvn -DskipTests deploy'
             }
         }
         stage('Deploy CloudHub') {
@@ -34,7 +34,7 @@ pipeline {
             steps {
                 sh 'echo $PATH'
                 slackSend (color: '#FFFF00', message: "${env.ENV} > Deploying to Cloudhub: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (<${env.BUILD_URL}|Open>)")
-                sh 'mvn deploy -DENV=' + "${env.ENV}" + ' -DskipTests -DmuleDeploy -Dmule.version=' + "${env.VERSION}" + ' -Danypoint.username=${ANYPOINT_CREDENTIALS_USR} -Danypoint.password=${ANYPOINT_CREDENTIALS_PSW} -e'
+                sh 'mvn deploy -DskipTests -DmuleDeploy -Dmule.version=' + "${env.VERSION}" + ' -Danypoint.username=${ANYPOINT_CREDENTIALS_USR} -Danypoint.password=${ANYPOINT_CREDENTIALS_PSW} -e'
             }
         }
     }
