@@ -174,7 +174,7 @@ output application/json
             </on-error-propagate>
         </error-handler>
     </flow>
-    <flow name="get:ping:blend-template-connector-api-config">
+    <flow name="get:\ping:blend-template-connector-api-config">
         <logger level="INFO" doc:name="Start" doc:id="94e02029-88e9-45a7-af87-d5c204bf1432" message='#[%dw 2.0
 output application/json
 ---
@@ -212,7 +212,7 @@ route : vars.dd.route
             <flow-ref doc:name="DD feed" doc:id="b882c851-9cac-4844-bc3c-7f02dc4ec5d6" name="dd_success_path" />
         </async>
     </flow>
-    <flow name="post:extv1resourcename:applicationjson:blend-template-connector-api-config">
+    <flow name="post:\ext\v1\resourcename:application\json:blend-template-connector-api-config">
         <logger level="INFO" doc:name="Start" doc:id="26eaee8f-d9e4-4cd7-b34a-6f56c4a07ff1" message='#[%dw 2.0
 output application/json
 ---

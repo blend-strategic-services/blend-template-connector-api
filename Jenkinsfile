@@ -12,7 +12,7 @@ pipeline {
                 slackSend (color: '#FFFF00', message: "${env.ENV} > STARTED : Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (<${env.BUILD_URL}|Open>)")
                 slackSend (color: '#FFFF00', message: "${env.ENV} > Executing Tests: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (<${env.BUILD_URL}|Open>)")
                 echo 'Running tests...'
-                sh 'mvn clean test'
+                sh 'mvn -Denv=test clean test'
             }
         }
         stage('Deploy to Binary Repo') {
