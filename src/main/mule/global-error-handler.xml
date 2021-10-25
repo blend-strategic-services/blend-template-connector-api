@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns:cloudhub="http://www.mulesoft.org/schema/mule/cloudhub" xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
+	xmlns:cloudhub="http://www.mulesoft.org/schema/mule/cloudhub"
 	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
-http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd
 http://www.mulesoft.org/schema/mule/cloudhub http://www.mulesoft.org/schema/mule/cloudhub/current/mule-cloudhub.xsd">
-	<sub-flow name="send-email-alert" doc:id="5d3a488d-4029-4649-9085-0fef89f8de3f" >
-		<async doc:name="Async" doc:id="027fa6dc-8bc6-4db2-a682-d2799b3060d2" >
-			<ee:transform doc:name="Transform Message" doc:id="53a30459-a655-4056-929f-69af719e902e" >
+	<sub-flow name="send-email-alert" doc:id="5d3a488d-4029-4649-9085-0fef89f8de3f">
+		<async doc:name="Async" doc:id="027fa6dc-8bc6-4db2-a682-d2799b3060d2">
+			<ee:transform doc:name="Transform Message" doc:id="53a30459-a655-4056-929f-69af719e902e">
 				<ee:message >
 					<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -47,9 +48,9 @@ var email_bcc = if (p("secure::losConnectors.neto.email_bcc") != null and p("sec
 			</ee:transform>
 			<http:request method="POST" doc:name="Request" doc:id="7ce170ca-628f-4786-98c9-78aad0d2645e" config-ref="msutil_config" path="/email" />
 		</async>
-		
+
 	</sub-flow>
-	<error-handler name="global-error-handler" doc:id="f4a05078-fb7f-4800-a51e-c3b31cf0e6b5" >
+	<error-handler name="global-error-handler" doc:id="f4a05078-fb7f-4800-a51e-c3b31cf0e6b5">
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="dfa39461-cc0c-4872-a9fd-86b52b4e30bf" type="HTTP:NOT_FOUND, APIKIT:NOT_FOUND">
 			<ee:transform doc:name="Transform Message" doc:id="ac4d5f10-6194-47c3-b50a-7fb8bc790e02">
 				<ee:message>
@@ -65,19 +66,19 @@ output application/xml
 }]]></ee:set-payload>
 				</ee:message>
 				<ee:variables>
-					<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+					<ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
 output application/java
 ---
 404]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
 			<logger level="INFO" doc:name="Logger" doc:id="2a2fabd3-fa35-4414-8533-7976688673a1" message="#[payload]"/>
-			<async doc:name="Async" doc:id="3a85fc7e-010f-4d82-9fa1-0e4ebad85635" >
+			<async doc:name="Async" doc:id="3a85fc7e-010f-4d82-9fa1-0e4ebad85635">
 				<flow-ref doc:name="DD feed" doc:id="3c34eb78-12bc-4cf4-afb6-338946899410" name="dd_error_path"/>
 			</async>
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="c4f6806e-4ed9-41f3-8107-6a1f6433b138" type="APIKIT:BAD_REQUEST, HTTP:BAD_REQUEST">
-			<ee:transform doc:name="Transform Message" doc:id="e48ebf98-80a8-4827-b000-6e9b09e840cc" >
+			<ee:transform doc:name="Transform Message" doc:id="e48ebf98-80a8-4827-b000-6e9b09e840cc">
 				<ee:message >
 					<ee:set-payload ><![CDATA[%dw 2.0
 output application/xml
@@ -91,19 +92,19 @@ output application/xml
 }]]></ee:set-payload>
 				</ee:message>
 				<ee:variables >
-					<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+					<ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
 output application/java
 ---
 400]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
 			<logger level="INFO" doc:name="Logger" doc:id="3f6d9303-01cb-4f90-8696-4cac725c615d" message="#[payload]" />
-			<async doc:name="Async" doc:id="cc015d02-882d-4492-84ba-c436c61805d1" >
+			<async doc:name="Async" doc:id="cc015d02-882d-4492-84ba-c436c61805d1">
 				<flow-ref doc:name="DD feed" doc:id="83452b58-6827-4652-88dc-0b9ca24c9918" name="dd_error_path" />
 			</async>
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="69a84a47-c3be-4fd3-a6f7-4746efe4ce4e" type="APIKIT:METHOD_NOT_ALLOWED, HTTP:METHOD_NOT_ALLOWED">
-			<ee:transform doc:name="Transform Message" doc:id="f194c66e-79b5-49ae-a682-8fd761fafcaa" >
+			<ee:transform doc:name="Transform Message" doc:id="f194c66e-79b5-49ae-a682-8fd761fafcaa">
 				<ee:message >
 					<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -117,19 +118,19 @@ output application/json
 }]]></ee:set-payload>
 				</ee:message>
 				<ee:variables >
-					<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+					<ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
 output application/java
 ---
 405]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
 			<logger level="INFO" doc:name="Logger" doc:id="b19468c5-fd81-427c-87cb-349dc0c1accf" message="#[payload]" />
-			<async doc:name="Async" doc:id="db38b80e-183d-49b3-944c-8de02520ae26" >
+			<async doc:name="Async" doc:id="db38b80e-183d-49b3-944c-8de02520ae26">
 				<flow-ref doc:name="DD feed" doc:id="738411b0-6d63-4d99-a156-da0e9fa685c2" name="dd_error_path" />
 			</async>
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="55c77cc1-f7ca-4d72-908a-407cebb09929" type="APIKIT:NOT_ACCEPTABLE, HTTP:NOT_ACCEPTABLE">
-			<ee:transform doc:name="Transform Message" doc:id="51c4cd4b-abfd-435a-86dd-608a58da4d0a" >
+			<ee:transform doc:name="Transform Message" doc:id="51c4cd4b-abfd-435a-86dd-608a58da4d0a">
 				<ee:message >
 					<ee:set-payload ><![CDATA[%dw 2.0
 output application/xml
@@ -143,19 +144,19 @@ output application/xml
 }]]></ee:set-payload>
 				</ee:message>
 				<ee:variables >
-					<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+					<ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
 output application/java
 ---
 406]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
 			<logger level="INFO" doc:name="Logger" doc:id="0c3c0f22-8b36-4b04-83ef-6a324f2e75e0" message="#[payload]" />
-			<async doc:name="Async" doc:id="6138e378-cfa6-4a67-923c-441ea4701a3a" >
+			<async doc:name="Async" doc:id="6138e378-cfa6-4a67-923c-441ea4701a3a">
 				<flow-ref doc:name="DD feed" doc:id="21deacd3-5846-4c52-9ec0-5180a9dfe538" name="dd_error_path" />
 			</async>
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="b41585e9-e581-4c35-9647-288a89b4283b" type="APIKIT:UNSUPPORTED_MEDIA_TYPE, HTTP:UNSUPPORTED_MEDIA_TYPE">
-			<ee:transform doc:name="Transform Message" doc:id="cbd32e7a-58e3-4a89-9821-39d7b0c27a48" >
+			<ee:transform doc:name="Transform Message" doc:id="cbd32e7a-58e3-4a89-9821-39d7b0c27a48">
 				<ee:message >
 					<ee:set-payload ><![CDATA[%dw 2.0
 output application/xml
@@ -169,19 +170,19 @@ output application/xml
 }]]></ee:set-payload>
 				</ee:message>
 				<ee:variables >
-					<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+					<ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
 output application/java
 ---
 415]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
 			<logger level="INFO" doc:name="Logger" doc:id="d8ffed5b-1676-42da-bb4a-db95bc68831a" message="#[payload]" />
-			<async doc:name="Async" doc:id="a5012252-89ea-4453-ade5-dd5018279047" >
+			<async doc:name="Async" doc:id="a5012252-89ea-4453-ade5-dd5018279047">
 				<flow-ref doc:name="DD feed" doc:id="e934bbd6-0b2e-4e3c-a528-372c44dccd51" name="dd_error_path" />
 			</async>
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="b1d3aa29-6c20-4061-ac03-52f16d2e7780" type="HTTP:TOO_MANY_REQUESTS">
-			<ee:transform doc:name="Transform Message" doc:id="66a94405-029c-48c0-811b-d557386e73a6" >
+			<ee:transform doc:name="Transform Message" doc:id="66a94405-029c-48c0-811b-d557386e73a6">
 				<ee:message >
 					<ee:set-payload ><![CDATA[%dw 2.0
 output application/xml
@@ -195,19 +196,19 @@ output application/xml
 }]]></ee:set-payload>
 				</ee:message>
 				<ee:variables >
-					<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+					<ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
 output application/java
 ---
 429]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
 			<logger level="INFO" doc:name="Logger" doc:id="777f8560-6979-4682-a687-6543ec30ede3" message="#[payload]" />
-			<async doc:name="Async" doc:id="c393442f-f3d1-4ab9-808d-bc0eba2da356" >
+			<async doc:name="Async" doc:id="c393442f-f3d1-4ab9-808d-bc0eba2da356">
 				<flow-ref doc:name="DD feed" doc:id="439c91cb-434f-4c1c-85b7-aaa068b1f850" name="dd_error_path" />
 			</async>
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="9f92b8ec-62fd-4b2c-b656-fbf567c81543" type="APIKIT:NOT_IMPLEMENTED">
-			<ee:transform doc:name="Transform Message" doc:id="5f508459-2f57-4fc6-a912-3ebe5373ed6d" >
+			<ee:transform doc:name="Transform Message" doc:id="5f508459-2f57-4fc6-a912-3ebe5373ed6d">
 				<ee:message >
 					<ee:set-payload ><![CDATA[%dw 2.0
 output application/xml
@@ -221,19 +222,19 @@ output application/xml
 }]]></ee:set-payload>
 				</ee:message>
 				<ee:variables >
-					<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+					<ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
 output application/java
 ---
 501]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
 			<logger level="INFO" doc:name="Logger" doc:id="84089d2d-02f8-41ef-aea6-e79dfdd136d9" message="#[payload]" />
-			<async doc:name="Async" doc:id="8884af3a-4bf8-495d-b9ca-b1376045df76" >
+			<async doc:name="Async" doc:id="8884af3a-4bf8-495d-b9ca-b1376045df76">
 				<flow-ref doc:name="DD feed" doc:id="b4dd1789-0d8d-4c0d-91b5-ee02f835ac71" name="dd_error_path" />
 			</async>
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="fde89aad-0a19-4392-8a04-64845f185d29" type="HTTP:CONNECTIVITY, HTTP:RETRY_EXHAUSTED, HTTP:SERVICE_UNAVAILABLE">
-			<ee:transform doc:name="Transform Message" doc:id="8925b35e-2345-4ee6-90bf-7eca67c4f776" >
+			<ee:transform doc:name="Transform Message" doc:id="8925b35e-2345-4ee6-90bf-7eca67c4f776">
 				<ee:message >
 					<ee:set-payload ><![CDATA[%dw 2.0
 output application/xml
@@ -247,11 +248,11 @@ output application/xml
 }]]></ee:set-payload>
 				</ee:message>
 				<ee:variables >
-					<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+					<ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
 output application/java
 ---
 503]]></ee:set-variable>
-					<ee:set-variable variableName="emailPayload" ><![CDATA[%dw 2.0
+					<ee:set-variable variableName="emailPayload"><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -269,12 +270,12 @@ output application/json
 			</ee:transform>
 			<flow-ref doc:name="send-email-alert" doc:id="8e63c920-2406-4e5c-8948-919ef2ae5d2e" name="send-email-alert"/>
 			<logger level="INFO" doc:name="Logger" doc:id="8a3fb6ee-2efe-4080-9025-0e2bfb4e1ceb" message="#[payload]" />
-			<async doc:name="Async" doc:id="ab08683b-b725-4098-aa8e-b841013cef67" >
+			<async doc:name="Async" doc:id="ab08683b-b725-4098-aa8e-b841013cef67">
 				<flow-ref doc:name="DD feed" doc:id="9d7a99fd-e8f9-408d-a02f-e809e7af5e1f" name="dd_error_path" />
 			</async>
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="adf0d084-a637-4f9b-9c47-2e2bfe7724fb" type="HTTP:TIMEOUT">
-			<ee:transform doc:name="Transform Message" doc:id="ab352ae0-6f00-46e3-9964-241ecb1e5b37" >
+			<ee:transform doc:name="Transform Message" doc:id="ab352ae0-6f00-46e3-9964-241ecb1e5b37">
 				<ee:message >
 					<ee:set-payload ><![CDATA[%dw 2.0
 output application/xml
@@ -288,11 +289,11 @@ output application/xml
 }]]></ee:set-payload>
 				</ee:message>
 				<ee:variables >
-					<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+					<ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
 output application/java
 ---
 408]]></ee:set-variable>
-					<ee:set-variable variableName="emailPayload" ><![CDATA[%dw 2.0
+					<ee:set-variable variableName="emailPayload"><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -310,7 +311,7 @@ output application/json
 			</ee:transform>
 			<flow-ref doc:name="send-email-alert" doc:id="94425435-2a70-4b4c-a5ab-0368257dd243" name="send-email-alert"/>
 			<logger level="INFO" doc:name="Logger" doc:id="2ba8ff55-3ccc-4fb6-b7b2-7efdeb62f2f4" message="#[payload]" />
-			<async doc:name="Async" doc:id="57954bf9-3276-4897-b0b0-e7ac44d0902f" >
+			<async doc:name="Async" doc:id="57954bf9-3276-4897-b0b0-e7ac44d0902f">
 				<flow-ref doc:name="DD feed" doc:id="b82e0eb3-26ab-4756-93a4-97f7ee74641b" name="dd_error_path" />
 			</async>
 		</on-error-propagate>
@@ -353,13 +354,13 @@ else "Missing Data"
 			</ee:transform>
 			<logger level="INFO" doc:name="Logger" doc:id="722834a5-d1ac-482a-928d-1c061b65c30f" message="#[payload]" />
 			<flow-ref doc:name="send-email-alert" doc:id="9dbc1249-ead4-48ea-b739-29cefcc93eb4" name="send-email-alert" />
-			<async doc:name="Async" doc:id="7a0d849a-0b9f-4754-9441-fa6725b1a0c5" >
+			<async doc:name="Async" doc:id="7a0d849a-0b9f-4754-9441-fa6725b1a0c5">
 				<flow-ref doc:name="DD feed" doc:id="473242ed-0985-4ad2-9c86-029877418335" name="dd_error_path" />
 			</async>
-		
-</on-error-propagate>
+
+		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="7d144948-8ec2-427b-838f-3b09c26a47c4" type="HTTP:FORBIDDEN, HTTP:NOT_ACCEPTABLE, HTTP:PARSING, HTTP:SECURITY, HTTP:UNAUTHORIZED">
-			<ee:transform doc:name="Transform Message" doc:id="92b2c9e4-46ce-4979-832d-7db6531da300" >
+			<ee:transform doc:name="Transform Message" doc:id="92b2c9e4-46ce-4979-832d-7db6531da300">
 				<ee:message >
 					<ee:set-payload ><![CDATA[%dw 2.0
 output application/xml
@@ -373,14 +374,14 @@ output application/xml
 }]]></ee:set-payload>
 				</ee:message>
 				<ee:variables >
-					<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+					<ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
 output application/java
 ---
 403]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
 			<logger level="INFO" doc:name="Logger" doc:id="b8a8c349-fbcf-4376-b3d8-977a1827cf35" message="#[payload]" />
-			<async doc:name="Async" doc:id="51bb3abd-8908-46d4-a19b-5fd168b4588a" >
+			<async doc:name="Async" doc:id="51bb3abd-8908-46d4-a19b-5fd168b4588a">
 				<flow-ref doc:name="DD feed" doc:id="487abab0-96dd-4538-8da5-01b73572e48e" name="dd_error_path" />
 			</async>
 		</on-error-propagate>
@@ -399,7 +400,7 @@ output application/xml
 }]]></ee:set-payload>
 				</ee:message>
 				<ee:variables >
-					<ee:set-variable variableName="emailPayload" ><![CDATA[%dw 2.0
+					<ee:set-variable variableName="emailPayload"><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -421,10 +422,10 @@ output application/json
 			</ee:transform>
 			<logger level="INFO" doc:name="Logger" doc:id="eb17046c-b189-44dd-9944-59d79aa5c331" message="#[payload]" />
 			<flow-ref doc:name="send-email-alert" doc:id="9d5a919d-590c-4c86-a75f-753c23dd26d6" name="send-email-alert" />
-			<async doc:name="Async" doc:id="0c171158-7ae7-48d4-b8f7-cf215ec89a38" >
+			<async doc:name="Async" doc:id="0c171158-7ae7-48d4-b8f7-cf215ec89a38">
 				<flow-ref doc:name="DD feed" doc:id="0eec5939-4f79-4996-8b7e-a1012c09d722" name="dd_error_path" />
 			</async>
-		
-</on-error-propagate>
+
+		</on-error-propagate>
 	</error-handler>
 </mule>
