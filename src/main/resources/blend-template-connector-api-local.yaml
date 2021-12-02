@@ -27,8 +27,24 @@ externalProxy:
   username: "![/M3XncZNRNJMpEt6Hn4WQQEjbPWtaP6PLhrsUmMWLNaDR01pb7sbHw==]"
   password: "![fdpzCSnjY0VuwdsTtCdIbeGo8HKPyF0dsW3OX6uEjRPe8bg1VnCp8w==]"
 
+dataDog:
+  host: "api.datadoghq.com"
+  applicationKey: "![KkzncxmhhNIRu6qfUxGnYRw5rhwBCx2ZMNARYoI5U9u65AjqnzUKjYRjIOjTAqJx]"
+  apiKey: "![GB59eM0SAdmKA+ssDUuXHyTIJX3SI9cm0agIvFFyi9hr22P2u/20LQ==]"
+
+sentry:
+  dsn: "![nFwsOL1GjSpheuaqvBweq4Wn3ASeekiky6fq5GKtXjjgVKSkxvcZtDycQ9SCD75nWX4WOuik6bB7x1dQlANfjE0hRwp/xMC6]"
+  projectId: "120"
+  apiKey: "![nFwsOL1GjSpheuaqvBweq4Wn3ASeekiky6fq5GKtXjgfQYJ504zffA==]"
+
 psqlDb:
   host: "localhost"
   port: "5432"
   username: "postgres"
   password: "postgres"
+
+psqlSysApi:
+    host: "mule-worker-blend-db-sys-api-dev.us-e1.cloudhub.io"
+    port: "8082"
+    username: "Contact Blend IE for username"
+    password: "Contact Blend IE for username"
