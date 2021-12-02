@@ -4,12 +4,6 @@ api:
 keystore:
   password: "![U9uR8Upd20i5eHyR34IBi+BVhHcyvjg8Yxy6dIISmYxNjZG2fVkN/pUNgv0usnLD]"
 
-cloudhubConnection:
-  username: "no-reply-integrations"
-  password: "![XINOsf0Tso6BR1Hujmu9bZfkHO5l3zGh]"
-  domain: "blend-template-connector-api-dev"
-  envId: "d2ab3fb4-221a-4a1a-9941-6a1011040bf6"
-
 listener:
   https:
     port: "8082"
