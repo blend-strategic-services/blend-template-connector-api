@@ -9,47 +9,47 @@
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/cloudhub http://www.mulesoft.org/schema/mule/cloudhub/current/mule-cloudhub.xsd">
-	<sub-flow name="send-email-alert" doc:id="5d3a488d-4029-4649-9085-0fef89f8de3f">
-		<async doc:name="Async" doc:id="027fa6dc-8bc6-4db2-a682-d2799b3060d2">
-			<ee:transform doc:name="Transform Message" doc:id="53a30459-a655-4056-929f-69af719e902e">
-				<ee:message >
-					<ee:set-payload ><![CDATA[%dw 2.0
+	<flow name="global-send-email-alert" doc:id="05c0d649-536c-4917-bac5-973a2a189613" >
+		<ee:transform doc:name="Transform Message" doc:id="53a30459-a655-4056-929f-69af719e902e">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 var env = p('env') default ""
 var httpCode = error.muleMessage.attributes.statusCode default ""
-var httpResponse = (error.description default "") ++ "<br>" ++ (vars.errorDisplay replace " || " with "<br>" default "")
 var timeOccurred = now()
 var blendGuid = vars.blendLoanId default ""
-var loanRefNum = vars.loanRefNum default ""
-var losId = vars.externalLoanId default ""
 var blendInstance = vars.tenantInstance default ""
 var numOfRetries = p("externalRequest.long-retry.attempts")
-var email_to = if (p("secure::losConnectors.neto.email_to") != null and p("secure::losConnectors.neto.email_to") != "")
-		p("secure::losConnectors.neto.email_to") splitBy(",")
+var email_to = if(true)
+		[]
 	else
 		[]	
-var email_cc = if (p("secure::losConnectors.neto.email_cc") != null and p("secure::losConnectors.neto.email_cc") != "")
-		p("secure::losConnectors.neto.email_cc") splitBy(",")
-	else
+var email_cc = if(true)
 		[]
-var email_bcc = if (p("secure::losConnectors.neto.email_bcc") != null and p("secure::losConnectors.neto.email_bcc") != "")
-		p("secure::losConnectors.neto.email_bcc") splitBy(",")
+	else
+		[]	
+var email_bcc = if(true)
+		[]
 	else
 		[]
 ---
 {
-    "email_subject": "Huntington " ++ env ++ " - Export Failed after " ++ numOfRetries ++ " long retries",
-    "email_body": "Loan export <b>failed</b>.<br/><ul><li>HTTP Status Code: " ++ httpCode ++"</li><li>Time occurred: " ++ timeOccurred ++"</li><li>Blend GUID: " ++ blendGuid ++"</li><li>Reference Loan Number: " ++ loanRefNum ++"</li><li>Huntington Loan Number: " ++ losId ++"</li><li>Blend Instance: " ++ blendInstance ++"</li><li>Huntington Instance: " ++ customerInstance ++ "</li></ul>",
+    "email_subject": "Mulesoft INTG_TYPE " ++ env ++ " - Export Failed",
+    "email_body": "Loan export <b>failed</b>.<br/><ul><li>HTTP Status Code: " ++ httpCode ++"</li><li>Time occurred: " ++ timeOccurred ++"</li><li>Blend GUID: " ++ blendGuid ++"</li><li>Blend Instance: " ++ blendInstance ++"</li></ul>",
     "email_to": email_to,
     "email_cc": email_cc,
     "email_bcc": email_bcc
 }]]></ee:set-payload>
 				</ee:message>
 			</ee:transform>
-			<http:request method="POST" doc:name="Request" doc:id="7ce170ca-628f-4786-98c9-78aad0d2645e" config-ref="msutil_config" path="/email" />
-		</async>
-
-	</sub-flow>
+		<http:request method="POST" doc:name="Request" doc:id="7ce170ca-628f-4786-98c9-78aad0d2645e" config-ref="mulesoft_msutil_config" path="/email" />
+		<error-handler>
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="b79be7e2-89ec-41f9-bae9-0481c0d75845" >
+				<flow-ref doc:name="Datadog error" doc:id="0c99cefd-4294-4714-b860-30de7885393e" name="global-dd-error" />
+				<flow-ref doc:name="Sentry error" doc:id="7f0f294e-5588-40b2-ace1-f1737bc130e0" name="global-sentry-error" />
+			</on-error-continue>
+		</error-handler>
+	</flow>
 	<error-handler name="global-error-handler" doc:id="f4a05078-fb7f-4800-a51e-c3b31cf0e6b5">
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="dfa39461-cc0c-4872-a9fd-86b52b4e30bf" type="HTTP:NOT_FOUND, APIKIT:NOT_FOUND">
 			<ee:transform doc:name="Transform Message" doc:id="ac4d5f10-6194-47c3-b50a-7fb8bc790e02">
@@ -73,9 +73,8 @@ output application/java
 				</ee:variables>
 			</ee:transform>
 			<logger level="INFO" doc:name="Logger" doc:id="2a2fabd3-fa35-4414-8533-7976688673a1" message="#[payload]"/>
-			<async doc:name="Async" doc:id="3a85fc7e-010f-4d82-9fa1-0e4ebad85635">
-				<flow-ref doc:name="DD feed" doc:id="3c34eb78-12bc-4cf4-afb6-338946899410" name="dd_error_path"/>
-			</async>
+			<flow-ref doc:name="Datadog error" doc:id="3c34eb78-12bc-4cf4-afb6-338946899410" name="global-dd-error" />
+			<flow-ref doc:name="Sentry error" doc:id="4c160fc2-eb77-4bb4-8aca-4543b2d38f9f" name="global-sentry-error" />
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="c4f6806e-4ed9-41f3-8107-6a1f6433b138" type="APIKIT:BAD_REQUEST, HTTP:BAD_REQUEST">
 			<ee:transform doc:name="Transform Message" doc:id="e48ebf98-80a8-4827-b000-6e9b09e840cc">
@@ -99,9 +98,8 @@ output application/java
 				</ee:variables>
 			</ee:transform>
 			<logger level="INFO" doc:name="Logger" doc:id="3f6d9303-01cb-4f90-8696-4cac725c615d" message="#[payload]" />
-			<async doc:name="Async" doc:id="cc015d02-882d-4492-84ba-c436c61805d1">
-				<flow-ref doc:name="DD feed" doc:id="83452b58-6827-4652-88dc-0b9ca24c9918" name="dd_error_path" />
-			</async>
+			<flow-ref doc:name="Datadog error" doc:id="4c7dbc60-590b-4049-88f0-f44bb3f8fec2" name="global-dd-error" />
+			<flow-ref doc:name="Sentry error" doc:id="e5e1afab-1290-47b5-b72f-96af5f77df6b" name="global-sentry-error" />
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="69a84a47-c3be-4fd3-a6f7-4746efe4ce4e" type="APIKIT:METHOD_NOT_ALLOWED, HTTP:METHOD_NOT_ALLOWED">
 			<ee:transform doc:name="Transform Message" doc:id="f194c66e-79b5-49ae-a682-8fd761fafcaa">
@@ -125,9 +123,8 @@ output application/java
 				</ee:variables>
 			</ee:transform>
 			<logger level="INFO" doc:name="Logger" doc:id="b19468c5-fd81-427c-87cb-349dc0c1accf" message="#[payload]" />
-			<async doc:name="Async" doc:id="db38b80e-183d-49b3-944c-8de02520ae26">
-				<flow-ref doc:name="DD feed" doc:id="738411b0-6d63-4d99-a156-da0e9fa685c2" name="dd_error_path" />
-			</async>
+			<flow-ref doc:name="Datadog error" doc:id="9500c724-3b89-4ef8-a815-2c8e9dbc6324" name="global-dd-error" />
+			<flow-ref doc:name="Sentry error" doc:id="6c014f20-aa02-4dcf-9f03-9f94e0d62c6d" name="global-sentry-error" />
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="55c77cc1-f7ca-4d72-908a-407cebb09929" type="APIKIT:NOT_ACCEPTABLE, HTTP:NOT_ACCEPTABLE">
 			<ee:transform doc:name="Transform Message" doc:id="51c4cd4b-abfd-435a-86dd-608a58da4d0a">
@@ -151,9 +148,8 @@ output application/java
 				</ee:variables>
 			</ee:transform>
 			<logger level="INFO" doc:name="Logger" doc:id="0c3c0f22-8b36-4b04-83ef-6a324f2e75e0" message="#[payload]" />
-			<async doc:name="Async" doc:id="6138e378-cfa6-4a67-923c-441ea4701a3a">
-				<flow-ref doc:name="DD feed" doc:id="21deacd3-5846-4c52-9ec0-5180a9dfe538" name="dd_error_path" />
-			</async>
+			<flow-ref doc:name="Datadog error" doc:id="b72015e5-9603-48d8-aa4d-8dd4fb020d76" name="global-dd-error" />
+			<flow-ref doc:name="Sentry error" doc:id="d6e1f6dc-b879-48e8-baf7-20fb41c73162" name="global-sentry-error" />
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="b41585e9-e581-4c35-9647-288a89b4283b" type="APIKIT:UNSUPPORTED_MEDIA_TYPE, HTTP:UNSUPPORTED_MEDIA_TYPE">
 			<ee:transform doc:name="Transform Message" doc:id="cbd32e7a-58e3-4a89-9821-39d7b0c27a48">
@@ -177,9 +173,8 @@ output application/java
 				</ee:variables>
 			</ee:transform>
 			<logger level="INFO" doc:name="Logger" doc:id="d8ffed5b-1676-42da-bb4a-db95bc68831a" message="#[payload]" />
-			<async doc:name="Async" doc:id="a5012252-89ea-4453-ade5-dd5018279047">
-				<flow-ref doc:name="DD feed" doc:id="e934bbd6-0b2e-4e3c-a528-372c44dccd51" name="dd_error_path" />
-			</async>
+			<flow-ref doc:name="Datadog error" doc:id="b2d0c125-c676-4f80-88e8-d50d609baa23" name="global-dd-error" />
+			<flow-ref doc:name="Sentry error" doc:id="4fad7a4a-8f76-4539-959b-7b97991d1cda" name="global-sentry-error" />
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="b1d3aa29-6c20-4061-ac03-52f16d2e7780" type="HTTP:TOO_MANY_REQUESTS">
 			<ee:transform doc:name="Transform Message" doc:id="66a94405-029c-48c0-811b-d557386e73a6">
@@ -203,9 +198,8 @@ output application/java
 				</ee:variables>
 			</ee:transform>
 			<logger level="INFO" doc:name="Logger" doc:id="777f8560-6979-4682-a687-6543ec30ede3" message="#[payload]" />
-			<async doc:name="Async" doc:id="c393442f-f3d1-4ab9-808d-bc0eba2da356">
-				<flow-ref doc:name="DD feed" doc:id="439c91cb-434f-4c1c-85b7-aaa068b1f850" name="dd_error_path" />
-			</async>
+			<flow-ref doc:name="Datadog error" doc:id="cbde2350-8491-42f9-b061-28f97b6b07bc" name="global-dd-error" />
+			<flow-ref doc:name="Sentry error" doc:id="d7048185-6d54-4f0c-9bc2-2c319d6cb5ba" name="global-sentry-error" />
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="9f92b8ec-62fd-4b2c-b656-fbf567c81543" type="APIKIT:NOT_IMPLEMENTED">
 			<ee:transform doc:name="Transform Message" doc:id="5f508459-2f57-4fc6-a912-3ebe5373ed6d">
@@ -229,9 +223,8 @@ output application/java
 				</ee:variables>
 			</ee:transform>
 			<logger level="INFO" doc:name="Logger" doc:id="84089d2d-02f8-41ef-aea6-e79dfdd136d9" message="#[payload]" />
-			<async doc:name="Async" doc:id="8884af3a-4bf8-495d-b9ca-b1376045df76">
-				<flow-ref doc:name="DD feed" doc:id="b4dd1789-0d8d-4c0d-91b5-ee02f835ac71" name="dd_error_path" />
-			</async>
+			<flow-ref doc:name="Datadog error" doc:id="94b6b78c-1d93-4941-a5ec-1307b5916969" name="global-dd-error" />
+			<flow-ref doc:name="Sentry error" doc:id="9ed8940a-4252-40fb-883b-37a87b74bd8e" name="global-sentry-error" />
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="fde89aad-0a19-4392-8a04-64845f185d29" type="HTTP:CONNECTIVITY, HTTP:RETRY_EXHAUSTED, HTTP:SERVICE_UNAVAILABLE">
 			<ee:transform doc:name="Transform Message" doc:id="8925b35e-2345-4ee6-90bf-7eca67c4f776">
@@ -268,11 +261,10 @@ output application/json
 }]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
-			<flow-ref doc:name="send-email-alert" doc:id="8e63c920-2406-4e5c-8948-919ef2ae5d2e" name="send-email-alert"/>
 			<logger level="INFO" doc:name="Logger" doc:id="8a3fb6ee-2efe-4080-9025-0e2bfb4e1ceb" message="#[payload]" />
-			<async doc:name="Async" doc:id="ab08683b-b725-4098-aa8e-b841013cef67">
-				<flow-ref doc:name="DD feed" doc:id="9d7a99fd-e8f9-408d-a02f-e809e7af5e1f" name="dd_error_path" />
-			</async>
+			<flow-ref doc:name="send-email-alert" doc:id="8e63c920-2406-4e5c-8948-919ef2ae5d2e" name="global-send-email-alert"/>
+			<flow-ref doc:name="Datadog error" doc:id="7693ad6e-f039-4c07-a1dd-9d53e3176ade" name="global-dd-error" />
+			<flow-ref doc:name="Sentry error" doc:id="65687411-679d-43aa-b54e-682b6fd4c6f2" name="global-sentry-error" />
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="adf0d084-a637-4f9b-9c47-2e2bfe7724fb" type="HTTP:TIMEOUT">
 			<ee:transform doc:name="Transform Message" doc:id="ab352ae0-6f00-46e3-9964-241ecb1e5b37">
@@ -309,11 +301,10 @@ output application/json
 }]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
-			<flow-ref doc:name="send-email-alert" doc:id="94425435-2a70-4b4c-a5ab-0368257dd243" name="send-email-alert"/>
 			<logger level="INFO" doc:name="Logger" doc:id="2ba8ff55-3ccc-4fb6-b7b2-7efdeb62f2f4" message="#[payload]" />
-			<async doc:name="Async" doc:id="57954bf9-3276-4897-b0b0-e7ac44d0902f">
-				<flow-ref doc:name="DD feed" doc:id="b82e0eb3-26ab-4756-93a4-97f7ee74641b" name="dd_error_path" />
-			</async>
+			<flow-ref doc:name="send-email-alert" doc:id="94425435-2a70-4b4c-a5ab-0368257dd243" name="global-send-email-alert"/>
+			<flow-ref doc:name="Datadog error" doc:id="c5607c90-200c-402d-9f96-3fe9bdfd330c" name="global-dd-error" />
+			<flow-ref doc:name="Sentry error" doc:id="55a649d3-bcd7-42c7-a20f-ab6fdb80133a" name="global-sentry-error" />
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="ecbe6abe-9c81-4bef-b8cf-64133d6ea4a1" type="EXPRESSION" when='error.description contains "MISMO Error"'>
 			<ee:transform doc:name="Transform Message" doc:id="de1c4816-dc3b-4c88-a8d5-2d6e34ffdbfd">
@@ -353,10 +344,9 @@ else "Missing Data"
 				</ee:variables>
 			</ee:transform>
 			<logger level="INFO" doc:name="Logger" doc:id="722834a5-d1ac-482a-928d-1c061b65c30f" message="#[payload]" />
-			<flow-ref doc:name="send-email-alert" doc:id="9dbc1249-ead4-48ea-b739-29cefcc93eb4" name="send-email-alert" />
-			<async doc:name="Async" doc:id="7a0d849a-0b9f-4754-9441-fa6725b1a0c5">
-				<flow-ref doc:name="DD feed" doc:id="473242ed-0985-4ad2-9c86-029877418335" name="dd_error_path" />
-			</async>
+			<flow-ref doc:name="send-email-alert" doc:id="9dbc1249-ead4-48ea-b739-29cefcc93eb4" name="global-send-email-alert" />
+			<flow-ref doc:name="Datadog error" doc:id="57ca2688-35f7-4bb2-a4b6-1f61c4d849cd" name="global-dd-error" />
+			<flow-ref doc:name="Sentry error" doc:id="230e4911-89a7-4e6d-939a-8a6581a74abf" name="global-sentry-error" />
 
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="7d144948-8ec2-427b-838f-3b09c26a47c4" type="HTTP:FORBIDDEN, HTTP:NOT_ACCEPTABLE, HTTP:PARSING, HTTP:SECURITY, HTTP:UNAUTHORIZED">
@@ -381,9 +371,8 @@ output application/java
 				</ee:variables>
 			</ee:transform>
 			<logger level="INFO" doc:name="Logger" doc:id="b8a8c349-fbcf-4376-b3d8-977a1827cf35" message="#[payload]" />
-			<async doc:name="Async" doc:id="51bb3abd-8908-46d4-a19b-5fd168b4588a">
-				<flow-ref doc:name="DD feed" doc:id="487abab0-96dd-4538-8da5-01b73572e48e" name="dd_error_path" />
-			</async>
+			<flow-ref doc:name="Datadog error" doc:id="4a84c7a7-7b9d-4a4f-8880-2299467ae908" name="global-dd-error" />
+			<flow-ref doc:name="Sentry error" doc:id="68e32039-20d0-4452-b62b-cf53d493aa92" name="global-sentry-error" />
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="d493a574-367a-4911-9cf3-54182a539d53" type="ANY">
 			<ee:transform doc:name="Transform Message" doc:id="8ecb6a8e-829c-4d64-a1e7-1bc74e20f816">
@@ -421,11 +410,15 @@ output application/json
 				</ee:variables>
 			</ee:transform>
 			<logger level="INFO" doc:name="Logger" doc:id="eb17046c-b189-44dd-9944-59d79aa5c331" message="#[payload]" />
-			<flow-ref doc:name="send-email-alert" doc:id="9d5a919d-590c-4c86-a75f-753c23dd26d6" name="send-email-alert" />
-			<async doc:name="Async" doc:id="0c171158-7ae7-48d4-b8f7-cf215ec89a38">
-				<flow-ref doc:name="DD feed" doc:id="0eec5939-4f79-4996-8b7e-a1012c09d722" name="dd_error_path" />
-			</async>
+			<flow-ref doc:name="send-email-alert" doc:id="9d5a919d-590c-4c86-a75f-753c23dd26d6" name="global-send-email-alert" />
+			<flow-ref doc:name="Datadog error" doc:id="23cc0987-3de7-4cf6-be61-23cab24870bd" name="global-dd-error" />
+			<flow-ref doc:name="Sentry error" doc:id="8de6faa6-6c91-4c7f-a9ff-90cfcd2483f5" name="global-sentry-error" />
 
 		</on-error-propagate>
+	</error-handler>
+	<error-handler name="global-error-handler-ignore" doc:id="8a6c2cb1-4ff7-449c-84e3-266c903521ec" >
+		<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="1bafd3c7-5e19-4594-a858-6dce4ba9eb17" >
+			<logger level="INFO" doc:name="Ignore error propagation" doc:id="29506216-1f10-4a40-9188-d25288951c74" message='#[error.description default ""]'/>
+		</on-error-continue>
 	</error-handler>
 </mule>
