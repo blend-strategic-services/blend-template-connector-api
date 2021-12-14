@@ -22,7 +22,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
             </ee:message>
             <ee:variables >
                 <ee:set-variable variableName="sentry"><![CDATA[%dw 2.0
-output application/json
+output application/java
 var intgType = attributes.headers['intg-type'] default ""
 var requestUrl = attributes.rawRequestPath default "" replace /b[0-9a-f]{8}b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-b[0-9a-f]{12}b/ with("{id}")
 replace /[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+/ with("{id}")
