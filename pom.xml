@@ -10,6 +10,11 @@
 	<packaging>mule-application</packaging>
 	<name>blend-template-connector-api</name>
 	<!-- Change to API Name i.e. myapi system API-->
+	<parent>
+		<artifactId>mule-parent-pom</artifactId>
+		<groupId>dae0cf96-56ae-4531-8ac8-994a57b3a880</groupId>
+		<version>1.0.4</version>
+	</parent>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -163,20 +168,9 @@
 		</dependency>
 		<dependency>
 			<groupId>org.mule.modules</groupId>
-			<artifactId>mule-validation-module</artifactId>
-			<version>1.4.0</version>
-			<classifier>mule-plugin</classifier>
-		</dependency>
-		<dependency>
-			<groupId>org.mule.modules</groupId>
 			<artifactId>mule-xml-module</artifactId>
 			<version>1.2.2</version>
 			<classifier>mule-plugin</classifier>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>2.16.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mulesoft.connectors</groupId>
@@ -185,33 +179,9 @@
 			<classifier>mule-plugin</classifier>
 		</dependency>
 		<dependency>
-			<groupId>org.mule.connectors</groupId>
-			<artifactId>mule-db-connector</artifactId>
-			<version>1.8.1</version>
-			<classifier>mule-plugin</classifier>
-		</dependency>
-		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>42.2.8</version>
-		</dependency>
-		<dependency>
-			<groupId>dae0cf96-56ae-4531-8ac8-994a57b3a880</groupId>
-			<artifactId>datadog-mule-extension</artifactId>
-			<version>1.0.7</version>
-			<classifier>mule-plugin</classifier>
-		</dependency>
-		<dependency>
-			<groupId>org.mule.connectors</groupId>
-			<artifactId>mule-http-connector</artifactId>
-			<version>1.5.11</version>
-			<classifier>mule-plugin</classifier>
-		</dependency>
-		<dependency>
-			<groupId>dae0cf96-56ae-4531-8ac8-994a57b3a880</groupId>
-			<artifactId>sentry-mule-extension</artifactId>
-			<version>1.0.8</version>
-			<classifier>mule-plugin</classifier>
 		</dependency>
 	</dependencies>
 
