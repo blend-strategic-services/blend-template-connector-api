@@ -13,7 +13,7 @@
 	<parent>
 		<artifactId>mule-parent-pom</artifactId>
 		<groupId>dae0cf96-56ae-4531-8ac8-994a57b3a880</groupId>
-		<version>1.0.4</version>
+		<version>1.0.5</version>
 	</parent>
 
 	<properties>
