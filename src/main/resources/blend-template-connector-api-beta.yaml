@@ -33,8 +33,8 @@ dataDog:
   apiKey: "![YCrBOwjx7m9x7dF8J0HxfYUO3Y7/kXdRzjoQPbMYojOWEQVl9Pm/nQ==]"
 
 sentry:
-  dsn: "![hhLYuIkmnWfJ4kPAoqSD7MvKC10cMpuyt3i5aHswVg0K9orJHZKHQVGS4DyASPptGk5FDQLlKPE9mFtUNO3VLLpXO1MhCJyK]"
-  projectId: "120"
+  dsn: "![hhLYuIkmnWfJ4kPAoqSD7MvKC10cMpuyt3i5aHswVg0K9orJHZKHQcbQ90rowQOiQzsLt29jaAEjFhTtCVfTLrxmFOiX9nM3]"
+  projectId: "6139387"
   apiKey: "![hhLYuIkmnWfJ4kPAoqSD7MvKC10cMpuyt3i5aHswVg11bY1No7rxGA==]"
 
 psqlDb:
