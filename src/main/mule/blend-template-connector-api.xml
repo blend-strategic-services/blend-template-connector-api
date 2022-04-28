@@ -62,7 +62,7 @@ replace /[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+/ with("{id}")
         <apikit:console config-ref="blend-template-connector-api-config" />
         <error-handler>
             <on-error-propagate type="APIKIT:NOT_FOUND">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:name="Build response">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -77,19 +77,10 @@ output application/json
         </error-handler>
     </flow>
     <flow name="get:\ping:blend-template-connector-api-config">
-        <logger level="INFO" doc:name="Start" doc:id="94e02029-88e9-45a7-af87-d5c204bf1432" message='#[%dw 2.0
-output application/json
----
-{
-tracepoint: "START",
-text : "Event received from loan exporter api",
-trackingId : vars.dd.trackingId,
-tenant: vars.dd.blendTenant default "N/A",
-route : vars.dd.route
-}]' />
+        <logger level="INFO" doc:name="Start" doc:id="94e02029-88e9-45a7-af87-d5c204bf1432" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	tracepoint: "START",&#10;	text: "Event received from loan exporter api",&#10;	container: "get:\ping:blend-template-connector-api-config",&#10;	trackingId: vars.dd.trackingId,&#10;	tenant: vars.dd.blendTenant default "N/A",&#10;	route: vars.dd.route&#10;}]' />
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="ca187e45-db42-42cd-acdb-1a742d18b985">
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="ca187e45-db42-42cd-acdb-1a742d18b985" doc:name="Build response">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -100,40 +91,13 @@ message: "Alive"
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
-        <logger level="INFO" doc:name="End" doc:id="9dc1ab2d-1b47-4efd-b30e-fa1c465a4f53" message='#[%dw 2.0
-output application/json
----
-{
-tracepoint: "START",
-text : "Event successfully processed",
-trackingId : vars.dd.trackingId,
-tenant: vars.dd.blendTenant default "N/A",
-route : vars.dd.route
-}]' />
+        <logger level="INFO" doc:name="End" doc:id="9dc1ab2d-1b47-4efd-b30e-fa1c465a4f53" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	tracepoint: "START",&#10;	text: "Event successfully processed",&#10;	container: "get:\ping:blend-template-connector-api-config",&#10;	trackingId: vars.dd.trackingId,&#10;	tenant: vars.dd.blendTenant default "N/A",&#10;	route: vars.dd.route&#10;}]' />
 		<flow-ref doc:name="Datadog success" doc:id="758b1b5f-8aeb-4220-801e-d1f04efd8a2f" name="global-dd-success"/>
     </flow>
     <flow name="post:\ext\v1\resourcename:application\json:blend-template-connector-api-config">
-        <logger level="INFO" doc:name="Start" doc:id="26eaee8f-d9e4-4cd7-b34a-6f56c4a07ff1" message='#[%dw 2.0
-output application/json
----
-{
-tracepoint: "START",
-text : "Event received from &lt;customer app name&gt; api",
-trackingId : vars.dd.trackingId,
-tenant: vars.dd.blendTenant default "N/A",
-route : vars.dd.route
-}]' />
-        <flow-ref doc:name="Flow Reference" doc:id="3203e5d1-3184-49ab-9a4b-f6392c43838f" name="dataExport"/>
-        <logger level="INFO" doc:name="End" doc:id="305a4ed6-aff3-443d-b69e-8e60c4366bcf" message='#[%dw 2.0
-output application/json
----
-{
-tracepoint: "START",
-text : "Event successfully processed",
-trackingId : vars.dd.trackingId,
-tenant: vars.dd.blendTenant default "N/A",
-route : vars.dd.route
-}]' />
+        <logger level="INFO" doc:name="Start" doc:id="26eaee8f-d9e4-4cd7-b34a-6f56c4a07ff1" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	tracepoint: "START",&#10;	text: "Event received from &lt;customer app name&gt; api",&#10;	container: "post:\ext\v1\resourcename:application\json:blend-template-connector-api-config",&#10;	trackingId: vars.dd.trackingId,&#10;	tenant: vars.dd.blendTenant default "N/A",&#10;	route: vars.dd.route&#10;}]' />
+        <flow-ref doc:name="data-export" doc:id="3203e5d1-3184-49ab-9a4b-f6392c43838f" name="data-export"/>
+        <logger level="INFO" doc:name="End" doc:id="305a4ed6-aff3-443d-b69e-8e60c4366bcf" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	tracepoint: "START",&#10;	text: "Event successfully processed",&#10;	container: "post:\ext\v1\resourcename:application\json:blend-template-connector-api-config",&#10;	trackingId: vars.dd.trackingId,&#10;	tenant: vars.dd.blendTenant default "N/A",&#10;	route: vars.dd.route&#10;}]' />
 		<flow-ref doc:name="Datadog success" doc:id="f76619f8-826b-4ba7-bc82-d67cef42081b" name="global-dd-success" />
     </flow>
 </mule>
