@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="blend-mule-data-map-practiceFlow" doc:id="60e7c4a5-d649-4ac7-9155-441533dcebd4" >
+		<http:listener doc:name="Listener" doc:id="2fcd3fb7-8097-4650-bafc-ae17b5ad3827" config-ref="main_listener" path="/dataMap"/>
+		<logger level="INFO" doc:name="Practice transform" doc:id="c6d0d7da-0e21-44b7-9fe8-86d24964286a" message="Replace with practice transform event processor"/>
+	</flow>
+</mule>
