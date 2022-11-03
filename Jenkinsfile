@@ -68,7 +68,7 @@ void setEnvironmentVars(String envParam) {
             env.ENV = "prod"
             env.VERSION = "4.4.0"              
             env.CLOUDHUB_WORKERTYPE = "Micro"
-            env.CLOUDHUB_WORKERS = "1"
+            env.CLOUDHUB_WORKERS = "2"
         }
     } else {
         env.CLOUDHUB_ENVIRONMENT = "Development"
