@@ -256,7 +256,7 @@ output application/json
 	"Blend Instance" : p('secure::blend-msutil.https.tenant'),
 	"Blend Loan Id" : vars.applicationId default "N/A",
 	"Event Status" : vars.eventStatus,
-	"LOS Loan ID" : vars.losId deafault "N/A",
+	"LOS Loan ID" : vars.losId default "N/A",
 	"Mule Transaction ID" : correlationId
 }]]></ee:set-variable>
 				</ee:variables>
@@ -296,7 +296,7 @@ output application/json
 	"Blend Instance" : p('secure::blend-msutil.https.tenant'),
 	"Blend Loan Id" : vars.applicationId default "N/A",
 	"Event Status" : vars.eventStatus,
-	"LOS Loan ID" : vars.losId deafault "N/A",
+	"LOS Loan ID" : vars.losId default "N/A",
 	"Mule Transaction ID" : correlationId
 }]]></ee:set-variable>
 				</ee:variables>
