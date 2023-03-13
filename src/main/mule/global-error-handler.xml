@@ -55,7 +55,7 @@ var email_bcc = if(true)
 			<ee:transform doc:name="Build response, set httpStatus" doc:id="ac4d5f10-6194-47c3-b50a-7fb8bc790e02">
 				<ee:message>
 					<ee:set-payload><![CDATA[%dw 2.0
-output application/xml
+output application/json
 ---
 {
   "error": "Not found",
@@ -80,7 +80,7 @@ output application/java
 			<ee:transform doc:name="Build response, set httpStatus" doc:id="e48ebf98-80a8-4827-b000-6e9b09e840cc">
 				<ee:message >
 					<ee:set-payload ><![CDATA[%dw 2.0
-output application/xml
+output application/json
 ---
 {
   "error": "Bad Request",
@@ -130,7 +130,7 @@ output application/java
 			<ee:transform doc:name="Build response, set httpStatus" doc:id="51c4cd4b-abfd-435a-86dd-608a58da4d0a">
 				<ee:message >
 					<ee:set-payload ><![CDATA[%dw 2.0
-output application/xml
+output application/json
 ---
 {
   "error": "Not Acceptable",
@@ -155,7 +155,7 @@ output application/java
 			<ee:transform doc:name="Build response, set httpStatus" doc:id="cbd32e7a-58e3-4a89-9821-39d7b0c27a48">
 				<ee:message >
 					<ee:set-payload ><![CDATA[%dw 2.0
-output application/xml
+output application/json
 ---
 {
   "error": "Unsupported Media Type",
@@ -180,7 +180,7 @@ output application/java
 			<ee:transform doc:name="Build response, set httpStatus" doc:id="66a94405-029c-48c0-811b-d557386e73a6">
 				<ee:message >
 					<ee:set-payload ><![CDATA[%dw 2.0
-output application/xml
+output application/json
 ---
 {
   "error": "too many Requests",
@@ -205,7 +205,7 @@ output application/java
 			<ee:transform doc:name="Build response, set httpStatus" doc:id="5f508459-2f57-4fc6-a912-3ebe5373ed6d">
 				<ee:message >
 					<ee:set-payload ><![CDATA[%dw 2.0
-output application/xml
+output application/json
 ---
 {
   "error": "Not implemented",
@@ -230,7 +230,7 @@ output application/java
 			<ee:transform doc:name="Build response, set emailPayload, httpStatus" doc:id="8925b35e-2345-4ee6-90bf-7eca67c4f776">
 				<ee:message >
 					<ee:set-payload ><![CDATA[%dw 2.0
-output application/xml
+output application/json
 ---
 {
   "error": "HTTP Connectivity",
@@ -270,7 +270,7 @@ output application/json
 			<ee:transform doc:name="Build response, set emailPayload, httpStatus" doc:id="ab352ae0-6f00-46e3-9964-241ecb1e5b37">
 				<ee:message >
 					<ee:set-payload ><![CDATA[%dw 2.0
-output application/xml
+output application/json
 ---
 {
   "error": "HTTP Timeout",
@@ -310,7 +310,7 @@ output application/json
 			<ee:transform doc:name="Build response, set emailPayload, httpStatus" doc:id="de1c4816-dc3b-4c88-a8d5-2d6e34ffdbfd">
 				<ee:message>
 					<ee:set-payload><![CDATA[%dw 2.0
-output application/xml
+output application/json
 var errorMessage = if (error.description contains("Something")) "Something cannot be empty" 
 else if (error.description contains("Otherthing")) "Otherthing cannot be empty"
 else "Missing Data"
@@ -353,7 +353,7 @@ else "Missing Data"
 			<ee:transform doc:name="Build response, set httpStatus" doc:id="92b2c9e4-46ce-4979-832d-7db6531da300">
 				<ee:message >
 					<ee:set-payload ><![CDATA[%dw 2.0
-output application/xml
+output application/json
 ---
 {
   "error": "HTTP Forbidden",
@@ -378,7 +378,7 @@ output application/java
 			<ee:transform doc:name="Build response, set emailPayload" doc:id="8ecb6a8e-829c-4d64-a1e7-1bc74e20f816">
 				<ee:message>
 					<ee:set-payload ><![CDATA[%dw 2.0
-output application/xml
+output application/json
 ---
 {
   "error": "Internal Server Error",
