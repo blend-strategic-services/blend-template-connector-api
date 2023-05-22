@@ -20,7 +20,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<mule.maven.plugin.version>3.5.3</mule.maven.plugin.version>
-		<munit.version>2.3.7</munit.version>
 	</properties>
 
 	<build>
@@ -58,7 +57,6 @@
 					<classifier>mule-application</classifier>
 					<cloudHubDeployment>
 						<uri>https://anypoint.mulesoft.com</uri>
-						<muleVersion>4.2.2</muleVersion>
 						<!-- Anypoint platform credentials that has Runtime deployer permissions -->
 						<!--                        <username>${username}</username> -->
 						<!--                        <password>${password}</password> -->
@@ -94,7 +92,7 @@
 			<plugin>
 				<groupId>com.mulesoft.munit.tools</groupId>
 				<artifactId>munit-maven-plugin</artifactId>
-				<version>${munit.version}</version>
+				<version>2.3.7</version>
 				<executions>
 					<execution>
 						<id>test</id>
@@ -118,29 +116,21 @@
 					</coverage>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<compilerArgs>
+						<args>-parameters</args>
+					</compilerArgs>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.mulesoft.connectors</groupId>
-			<artifactId>mule-cloudhub-connector</artifactId>
-			<version>1.0.1</version>
-			<classifier>mule-plugin</classifier>
-		</dependency>
-		<dependency>
-			<groupId>org.mule.modules</groupId>
-			<artifactId>mule-xml-module</artifactId>
-			<version>1.2.2</version>
-			<classifier>mule-plugin</classifier>
-		</dependency>
-		<dependency>
-			<groupId>com.mulesoft.connectors</groupId>
-			<artifactId>mule-amazon-s3-connector</artifactId>
-			<version>5.6.1</version>
-			<classifier>mule-plugin</classifier>
-		</dependency>
-	</dependencies>
+	<dependencies/>
 
 	<repositories>
 		<repository>

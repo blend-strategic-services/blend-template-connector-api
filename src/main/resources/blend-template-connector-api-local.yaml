@@ -29,8 +29,8 @@ externalProxy:
 
 dataDog:
   host: "api.datadoghq.com"
-  applicationKey: "![KkzncxmhhNIRu6qfUxGnYRw5rhwBCx2ZMNARYoI5U9u65AjqnzUKjYRjIOjTAqJx]"
-  apiKey: "![GB59eM0SAdmKA+ssDUuXHyTIJX3SI9cm0agIvFFyi9hr22P2u/20LQ==]"
+  applicationKey: "![OT0OtF5a8gNnvNpmOAE4wwNWWLd6DnSciP1xgq6U40rlAzOwNNrs++1V5bkK13Rp]"
+  apiKey: "![ttnJHmy9U6chT+Zb+pTuBJVE0Jrv3JUEuUmqviRguVpk+rGhvHfIKA==]"
 
 sentry:
   dsn: "![nFwsOL1GjSpheuaqvBweq4Wn3ASeekiky6fq5GKtXjjgVKSkxvcZtOBabIRyoGW5XhUhYDisjYPwuiNzLKAqiDmfY4oaf+nh]"
